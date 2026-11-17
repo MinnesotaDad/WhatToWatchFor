@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TJ6DNS27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iNaturalist: What to Watch For</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script>
+if (window.tailwind) tailwind.config = { theme: { extend: {
+  fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+  colors: { brand: { 50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d' } }
+} } };
+</script>
+<style>
+html, body { width:100%; min-height:100%; margin:0; padding:0; overflow-x:hidden; background:#f8fafc; font-family:'Plus Jakarta Sans',sans-serif; }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#f1f5f9; }
+::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+details[open] > summary .chev { transform:rotate(180deg); }
+.chev { transition:transform .2s; }
+@media print {
+  .no-print { display:none !important; }
+  body { background:#fff !important; color:#000 !important; }
+  .print-page-break { break-after:page; page-break-after:always; }
+  body.print-bingo #taxaAccordionContainer, body.print-bingo #resultsHeader { display:none !important; }
+  body:not(.print-bingo) #bingoContainer { display:none !important; }
+}
+/* Amazon Affiliate Banner Styles */
+#aff-banner { max-width: 728px; margin: 20px auto; border: 1px solid #d5d9d9; border-radius: 8px; padding: 16px; background: #f8faf9; color: #0f1111; font-family: system-ui, -apple-system, sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: none; box-sizing: border-box; }
+#aff-banner .aff-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+#aff-banner img { width: 110px; height: 110px; object-fit: contain; border-radius: 6px; background: #fff; padding: 4px; display: none; }
+#aff-banner .aff-body { flex: 1; min-width: 200px; }
+#aff-banner .aff-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #565959; margin-bottom: 4px; }
+#aff-banner .aff-title { font-size: 18px; font-weight: 700; color: #0f1111; text-decoration: none; display: block; margin-bottom: 6px; }
+#aff-banner .aff-desc { font-size: 14px; color: #333; margin: 0 0 12px; line-height: 1.4; }
+#aff-banner .aff-btn { display: inline-block; background: #ffd814; border: 1px solid #fcd200; color: #0f1111; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 20px; text-decoration: none; }
+#aff-banner .aff-disclosure { font-size: 11px; color: #565959; margin: 12px 0 0; padding-top: 8px; border-top: 1px solid #e3e6e6; }
+</style>
+<style id="fallbackCss" media="not all">
+/* Basic styling used only when the Tailwind CDN is blocked */
+body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.4;margin:0}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+header{background:#166534;color:#fff;padding:20px}
+header h1{margin:0;font-size:28px}
+main{max-width:1100px;margin:0 auto;padding:16px}
+section,details,footer{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px}
+summary{cursor:pointer;font-weight:700}
+input,select,textarea{padding:8px;border:1px solid #cbd5e1;border-radius:8px;max-width:100%;box-sizing:border-box;margin:2px 0}
+input[type=text],select,textarea{width:100%}
+button{padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;margin:2px}
+#analyzeBtn{background:#16a34a;color:#fff;width:100%;padding:12px;font-weight:700;margin-top:12px}
+a{color:#15803d}
+.flex{display:flex}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1}
+.items-center{align-items:center}.items-end{align-items:flex-end}.justify-end{justify-content:flex-end}.justify-between{justify-content:space-between}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-4{gap:16px}.w-full{width:100%}.h-9{height:36px}.h-14{height:56px}
+.grid{display:grid;gap:12px}.grid-cols-2{grid-template-columns:1fr 1fr}.grid-cols-5{grid-template-columns:repeat(5,1fr)}
+details .grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+details img{width:96px;height:96px;object-fit:cover;border-radius:8px;float:left;margin-right:12px}
+details .bg-brand-600{background:#16a34a}details .bg-slate-300{background:#cbd5e1}
+#bingoContainer .grid{gap:4px}#bingoContainer img{width:40px;height:40px;object-fit:cover}
+#autocompleteResults{border:1px solid #e2e8f0;background:#fff}#autocompleteResults>div{padding:8px;cursor:pointer}
+.print-page-break{break-after:page}
+</style>
+<script>if (!window.tailwind) document.getElementById('fallbackCss').media = 'all';</script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+<header class="bg-gradient-to-r from-brand-900 via-brand-800 to-emerald-800 text-white shadow-lg no-print">
+  <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="p-3 bg-white/10 rounded-2xl border border-white/20"><i class="fa-solid fa-leaf text-3xl text-emerald-300" aria-hidden="true"></i></div>
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">What to Watch For</h1>
+        <p class="text-emerald-100 text-sm mt-0.5">A Seasonal Guide to Local Wildlife</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-2 text-xs bg-white/10 px-3 py-2 rounded-lg border border-white/10 self-start md:self-auto">
+      <i class="fa-solid fa-binoculars text-emerald-300 text-base" aria-hidden="true"></i>
+      <span>Powered by <a href="https://www.inaturalist.org" target="_blank" rel="noopener" class="underline hover:text-emerald-200">iNaturalist</a> and <a href="https://ebird.org" target="_blank" rel="noopener" class="underline hover:text-emerald-200">eBird</a></span>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+  <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-7 mb-8 no-print">
+    <div class="mb-5 pb-5 border-b border-slate-100 flex flex-wrap items-center gap-2">
+      <label for="codeInput" class="text-xs font-semibold text-slate-700">Have a share code?</label>
+      <input type="text" id="codeInput" autocomplete="off" placeholder="Paste code here" class="flex-1 min-w-[180px] py-1.5 px-3 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+      <button type="button" id="loadCodeBtn" class="px-3 py-1.5 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition">Load search</button>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+        <div>
+          <label for="locationInput" class="block text-sm font-semibold text-slate-700 mb-1">
+            <i class="fa-solid fa-location-dot text-brand-600 mr-1.5" aria-hidden="true"></i> Select Locations (Up to 3)
+          </label>
+          <p class="text-xs text-slate-600 mb-2">Search for cities, counties, states, even local parks (e.g., "Olmsted County", "Minnesota").</p>
+          <div class="relative">
+            <div class="relative flex items-center">
+              <input type="text" id="locationInput" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="autocompleteResults"
+                placeholder="Type location name..."
+                class="w-full pl-10 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all outline-none">
+              <i class="fa-solid fa-search text-slate-400 absolute left-3.5" aria-hidden="true"></i>
+              <div id="locationSpinner" class="hidden absolute right-3 text-brand-600"><i class="fa-solid fa-circle-notch animate-spin text-sm" aria-hidden="true"></i></div>
+            </div>
+            <div id="autocompleteResults" role="listbox" aria-label="Matching places" class="hidden absolute z-30 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100"></div>
+          </div>
+          <div class="mt-2">
+            <button type="button" id="locateBtn" aria-describedby="locateHint" title="Finds the three U.S. counties nearest you from your internet address (sent to a free lookup service). It is approximate, and a VPN may make it inaccurate." class="px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Use my location</button>
+            <span id="locateHint" class="sr-only">Finds the three U.S. counties nearest you from your internet address. It is approximate, and a VPN may make it inaccurate.</span>
+          </div>
+          <div id="selectedLocationsContainer" class="flex flex-wrap gap-2 mt-3 min-h-[32px]"></div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 flex flex-col justify-between space-y-4 border-t lg:border-t-0 lg:border-l border-slate-200 pt-5 lg:pt-0 lg:pl-6">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="block text-sm font-semibold text-slate-700"><i class="fa-regular fa-calendar-days text-brand-600 mr-1.5" aria-hidden="true"></i> Target Time Period</span>
+            <div class="inline-flex p-0.5 bg-slate-100 rounded-lg text-xs font-medium">
+              <button type="button" id="toggleMonthBtn" aria-pressed="true" class="px-2.5 py-1 rounded-md">Single Month</button>
+              <button type="button" id="toggleDateRangeBtn" aria-pressed="false" class="px-2.5 py-1 rounded-md">Custom Range</button>
+            </div>
+          </div>
+
+          <div id="monthSelectorWrapper" class="mt-2">
+            <label for="monthSelect" class="sr-only">Month</label>
+            <select id="monthSelect" class="w-full py-2.5 px-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-medium text-slate-700">
+              <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+              <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+              <option value="10">October</option><option value="11" selected>November</option><option value="12">December</option>
+            </select>
+          </div>
+
+          <p id="rangeHint" class="hidden text-xs text-slate-600 mt-1">Choose up to 90 days.</p>
+          <div id="dateRangeWrapper" class="hidden grid-cols-2 gap-2 mt-2">
+            <div>
+              <label for="startDate" class="block text-xs font-medium text-slate-600 mb-0.5">Start Date</label>
+              <input type="date" id="startDate" class="w-full py-2 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+            <div>
+              <label for="endDate" class="block text-xs font-medium text-slate-600 mb-0.5">End Date</label>
+              <input type="date" id="endDate" class="w-full py-2 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <label for="minCountInput" class="text-xs text-slate-700 font-medium" title="Only show species with at least this many observations in your target period.">Minimum Observations:</label>
+            <input type="number" id="minCountInput" value="5" min="1" max="500" class="w-16 py-1 px-2 text-center text-xs font-semibold bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+          </div>
+          <p class="text-xs text-slate-600 mt-1.5">Try 10 for large areas (a state or big county), or 2 for small ones (a park or small town).</p>
+          <details class="mt-3 text-xs text-slate-700">
+            <summary class="cursor-pointer font-semibold">Advanced settings</summary>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <label for="thresholdInput">Spike Score threshold (%):</label>
+              <input type="number" id="thresholdInput" min="1" max="100" placeholder="auto" class="w-16 py-1 px-2 text-center text-xs font-semibold bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+            <p class="mt-1 text-slate-600">Species at or above this score are always shown. Leave blank to scale it automatically (about 30% for one month).</p>
+            <div class="mt-3 pt-3 border-t border-slate-100">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-semibold">Groups to include</span>
+                <span><button type="button" id="groupsAllBtn" class="underline">All</button> · <button type="button" id="groupsNoneBtn" class="underline">None</button></span>
+              </div>
+              <div id="groupChecks" class="grid grid-cols-2 gap-x-3 gap-y-1.5"></div>
+            </div>
+          </details>
+        </div>
+
+        <button id="analyzeBtn" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i><span>What Might I Find?</span>
+        </button>
+        <p class="text-xs text-slate-600 text-center">Large areas can take up to 30 seconds.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="notice" role="alert" class="hidden"></div>
+
+  <section id="progressSection" class="hidden bg-white rounded-2xl border border-slate-200 p-6 mb-8 shadow-sm no-print" aria-live="polite">
+    <div class="flex flex-col space-y-3">
+      <div class="flex items-center justify-between text-sm">
+        <span id="progressStatusText" class="font-semibold text-brand-700 flex items-center gap-2"></span>
+        <span id="progressPercent" class="text-xs font-bold text-slate-600">0%</span>
+      </div>
+      <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+        <div id="progressBar" class="bg-brand-500 h-full w-0 transition-all duration-300 rounded-full"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resultsHeader" class="hidden mb-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+      <div>
+        <h2 id="resultsTitle" class="text-xl font-bold text-slate-900">Analysis Results</h2>
+        <p id="resultsSubtitle" class="text-xs text-slate-600 mt-0.5"></p>
+        <p class="text-xs text-slate-600 mt-1"><strong>Spike Score</strong> = the share of a species' yearly sightings that happen in your chosen dates. Higher means it is more likely to be out right now.</p>
+        <p class="text-xs text-amber-800 mt-1"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Look, don't touch or taste. Some plants and mushrooms are poisonous.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 no-print">
+        <button id="expandAllBtn" class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition">Expand All</button>
+        <button id="collapseAllBtn" class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition">Collapse All</button>
+        <button id="printBtn" class="px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-print" aria-hidden="true"></i> Print Results</button>
+        <button id="shareBtn" class="px-3 py-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share Results</button>
+        <label for="bingoCount" class="text-xs font-semibold text-slate-700 ml-1">Bingo cards:</label><input type="number" id="bingoCount" min="1" max="32" value="32" class="w-14 py-1 px-2 text-center text-xs font-semibold bg-white border border-slate-300 rounded-lg outline-none">
+        <button id="bingoBtn" class="px-3 py-1.5 text-xs font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-table-cells" aria-hidden="true"></i> Generate Bingo Cards</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sharePanel" class="hidden no-print bg-sky-50 border border-sky-200 rounded-2xl p-4 mb-6">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-bold text-sky-900 text-sm">Share this search</h3>
+      <button type="button" id="closeShareBtn" class="text-xs text-sky-800 underline">Close</button>
+    </div>
+    <label for="shareText" class="sr-only">Share message</label>
+    <textarea id="shareText" readonly rows="4" class="w-full text-xs p-2 border border-sky-300 rounded-lg bg-white"></textarea>
+    <button type="button" id="copyShareBtn" class="mt-2 px-3 py-1.5 text-xs font-semibold text-sky-800 bg-white border border-sky-300 hover:bg-sky-100 rounded-lg transition">Copy message</button>
+  </section>
+
+  <section id="taxaAccordionContainer" class="space-y-4">
+    <div id="emptyState" class="bg-white rounded-2xl border border-slate-200 p-12 text-center my-8 shadow-sm no-print">
+      <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-chart-line text-2xl" aria-hidden="true"></i></div>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">Ready to Discover Seasonal Spikes</h3>
+      <p class="text-sm text-slate-600 max-w-md mx-auto">Select up to 3 locations and choose a time window above, then click <strong class="text-slate-800">What Might I Find?</strong> to explore peak organism activities.</p>
+    </div>
+  </section>
+
+  <section id="bingoContainer" class="hidden mt-8"></section>
+
+  <!-- Random Amazon Affiliate Banner -->
+  <div id="aff-banner" class="no-print">
+    <div class="aff-row">
+      <img id="aff-img" src="" alt="" />
+      <div class="aff-body">
+        <div class="aff-label">Field Gear Pick • Affiliate Link</div>
+        <a id="aff-title" class="aff-title" href="#" target="_blank" rel="nofollow sponsored noopener"></a>
+        <p id="aff-desc" class="aff-desc"></p>
+        <a id="aff-btn" class="aff-btn" href="#" target="_blank" rel="nofollow sponsored noopener"></a>
+      </div>
+    </div>
+    <p class="aff-disclosure">As an Amazon Associate, I receive a small commission from qualifying purchases.</p>
+  </div>
+</main>
+
+<footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-600 no-print">
+  <p>Plants, insects, and other groups use research-grade, non-captive observations from the <a href="https://api.inaturalist.org/v1/docs/" target="_blank" rel="noopener" class="underline hover:text-brand-600">iNaturalist V1 Open API</a>. Bird records come from the EOD – eBird Observation Dataset (Cornell Lab of Ornithology), accessed through GBIF.org under CC BY 4.0. Photos are credited to their iNaturalist contributors; commercially licensed photos are used where available.</p>
+  <p class="mt-2">This is an independent project, not affiliated with or endorsed by <a href="https://www.inaturalist.org" target="_blank" rel="noopener" class="underline hover:text-brand-600">iNaturalist</a> or <a href="https://ebird.org" target="_blank" rel="noopener" class="underline hover:text-brand-600">eBird</a>.</p>
+  <p class="mt-2">The "Use my location" button estimates your area from your IP address using geojs.io, with county borders from the U.S. Census Bureau. It is approximate and nothing is stored.</p>
+</footer>
+
+<script>
+/* CHANGE LOG: eBird birds via GBIF  (every edit is tagged [EBIRD-SWITCH] so it can be found and undone)
+   To turn eBird off: set CONFIG.BIRD_SOURCE to 'inaturalist'. To restore the old file entirely: what-to-watch-for-inat-birds.html.
+   Touched: (1) CONFIG keys, (2) the eBird helper block before upgradePhotos(), (3) runAnalysis(): bird candidates, selection,
+   subtitle note, (4) loadChart guard, (5) speciesCard wording/link, (6) upgradePhotos filter, (7) retry handler, (8) header badge, footer. */
+/* [LOCATE] "Use my location" button added. To undo: delete the [LOCATE] block, the #locateBtn button, and its listener,
+   or restore what-to-watch-for-before-locate.html. */
+const CONFIG = {
+  API: 'https://api.inaturalist.org/v1',
+  GBIF: 'https://api.gbif.org/v1',                        // [EBIRD-SWITCH]
+  BIRD_SOURCE: 'ebird',                                   // [EBIRD-SWITCH] 'ebird' or 'inaturalist'
+  EBIRD_DS: '4fa7b334-ce0d-4e88-aaae-2e0c138d049e',       // [EBIRD-SWITCH] EOD – eBird Observation Dataset
+  EBIRD_POOL: 42,                                         // [EBIRD-SWITCH] candidate birds per place
+  EBIRD_YEARS: 10,                                        // [EBIRD-SWITCH] 0 = all years
+  SITE_URL: 'https://sites.google.com/view/whattowatchfor/home',
+  MAX_LOCATIONS: 3,
+  GROUP_POOL: 42,     // candidate species pulled per category (plants, birds, fish...)
+  OTHER_POOL: 200,    // general pool used to catch 'Other Organisms'
+  CHUNK: 50,          // species per bulk whole-year lookup
+  PER_GROUP: 10,      // top species shown per category
+  MIN_PER_GROUP: 3,   // each category keeps at least this many if the cap bites
+  MAX_TOTAL: 75,      // hard cap on species shown
+  SPIKE_FACTOR: 3.6,  // threshold = this x the "even spread" share (30% for one month)
+  SPIKE_CAP: 85,      // auto threshold never exceeds this %
+  OPEN_PHOTOS_ONLY: false, // true = hide any photo that isn't commercially licensed
+  PREFER_OPEN_PHOTOS: true, // look for a commercially licensed photo first; keep the original if none exists
+  OPEN_LICENSES: ['cc0', 'cc-by', 'cc-by-sa'],
+  MAX_DAYS: 90,       // longest custom date range
+  CONCURRENCY: 4,     // simultaneous category / bulk requests
+  CHART_CONCURRENCY: 3, // simultaneous monthly-graph requests
+  CHART_GAP_MS: 300,  // pause after each graph request
+  RETRY_GAP_MS: 1200, // pause between slow second-pass retries
+  BINGO_CARDS: 32,
+  BINGO_SPECIES: 24,
+  HUMAN_TAXON_ID: 43584,
+  FILTERS: 'quality_grade=research&captive=false&without_taxon_id=43584'
+};
+
+const TAXON_GROUPS = [
+  { id:'Mammalia', name:'Mammals', icon:'fa-paw', color:'text-amber-800 bg-amber-100/50 border-amber-300', taxaIds:[40151] },
+  { id:'Aves', name:'Birds', icon:'fa-crow', color:'text-sky-600 bg-sky-50 border-sky-200', taxaIds:[3] },
+  { id:'Plantae', name:'Plants', icon:'fa-seedling', color:'text-emerald-600 bg-emerald-50 border-emerald-200', taxaIds:[47126] },
+  { id:'Insecta', name:'Insects', icon:'fa-bug', color:'text-amber-600 bg-amber-50 border-amber-200', taxaIds:[47158] },
+  { id:'Amphibia', name:'Amphibians', icon:'fa-frog', color:'text-teal-600 bg-teal-50 border-teal-200', taxaIds:[20978] },
+  { id:'Reptilia', name:'Reptiles', icon:'fa-dragon', color:'text-green-700 bg-green-100/50 border-green-300', taxaIds:[26036] },
+  { id:'Arachnida', name:'Arachnids', icon:'fa-spider', color:'text-purple-600 bg-purple-50 border-purple-200', taxaIds:[47119] },
+  { id:'Actinopterygii', name:'Fish', icon:'fa-fish', color:'text-blue-600 bg-blue-50 border-blue-200', taxaIds:[47178, 49354] },
+  { id:'Mollusca', name:'Mollusks', icon:'fa-water', color:'text-rose-600 bg-rose-50 border-rose-200', taxaIds:[47115] },
+  { id:'Fungi', name:'Fungi & Lichens', icon:'fa-disease', color:'text-orange-600 bg-orange-50 border-orange-200', taxaIds:[47170] },
+  { id:'Other', name:'Other Organisms', icon:'fa-dna', color:'text-slate-600 bg-slate-100 border-slate-200', taxaIds:[] }
+];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const BTN_ON = 'px-2.5 py-1 rounded-md bg-white shadow-sm text-slate-800 font-semibold transition-all';
+const BTN_OFF = 'px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-800 transition-all';
+
+const state = { selectedLocations: [], timeMode: 'month', analyzedSpecies: [], running: false };
+const $ = id => document.getElementById(id);
+
+// In-page messages (alert/prompt/print are blocked inside Google Sites embeds)
+let noticeTimer;
+function notify(msg, kind) {
+  const n = $('notice');
+  n.textContent = msg;
+  n.className = 'no-print mb-6 p-4 rounded-xl border text-sm font-medium ' + (kind === 'ok' ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900');
+  clearTimeout(noticeTimer);
+  noticeTimer = setTimeout(() => n.classList.add('hidden'), 12000);
+  n.scrollIntoView({ block: 'nearest' });
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+const CACHE = new Map(), CACHE_MS = 15 * 60 * 1000;
+async function fetchJson(url, signal, tries = 3) {
+  const hit = !signal && CACHE.get(url);
+  if (hit && Date.now() - hit.t < CACHE_MS) return hit.d;
+  for (let attempt = 0; ; attempt++) {
+    let res;
+    try { res = await fetch(url, { signal }); }
+    catch (e) { if (e.name === 'AbortError') throw e; res = { ok: false, status: 0 }; }
+    if (res.ok) {
+      const d = await res.json();
+      if (!signal) { CACHE.set(url, { t: Date.now(), d }); if (CACHE.size > 400) CACHE.delete(CACHE.keys().next().value); }
+      return d;
+    }
+    const retryable = res.status === 0 || res.status === 429 || res.status >= 500;
+    console.warn(`iNaturalist status ${res.status} for ${url.split('?')[0]} (attempt ${attempt + 1})`);
+    if (!retryable || attempt >= tries) throw new Error('HTTP ' + res.status);
+    await new Promise(r => setTimeout(r, (res.status === 429 ? 1500 : 800) * Math.pow(2, attempt)));
+  }
+}
+
+function usablePhoto(t, size) {
+  const p = t.default_photo;
+  if (!p || !p[size]) return null;
+  if (!CONFIG.OPEN_PHOTOS_ONLY) return p[size];
+  return CONFIG.OPEN_LICENSES.includes(String(p.license_code || '').toLowerCase()) ? p[size] : null;
+}
+// Excludes humans and anything labelled "domestic" (e.g. "Domestic Dog"). House Sparrow (Passer domesticus) is kept.
+function isExcluded(t) {
+  const common = (t.preferred_common_name || '').toLowerCase();
+  return t.id === CONFIG.HUMAN_TAXON_ID || t.name === 'Homo sapiens' || common === 'human' || /\bdomestic/.test(common);
+}
+
+function setProgress(pct, html) {
+  $('progressBar').style.width = pct + '%';
+  $('progressPercent').textContent = Math.round(pct) + '%';
+  $('progressTrack').setAttribute('aria-valuenow', Math.round(pct));
+  if (html) $('progressStatusText').innerHTML = html;
+}
+
+function printMode(bingo) {
+  document.body.classList.toggle('print-bingo', bingo);
+  if (!bingo) toggleAllAccordions(true);
+  try { window.print(); } catch (e) {}
+  notify(`Print view set to ${bingo ? 'the bingo cards' : 'the results'}. If no print window opened, press Ctrl+P (Cmd+P on Mac).`, 'ok');
+}
+window.addEventListener('afterprint', () => document.body.classList.remove('print-bingo'));
+
+function toggleAllAccordions(open) {
+  document.querySelectorAll('.taxon-details').forEach(el => open ? el.setAttribute('open', '') : el.removeAttribute('open'));
+}
+
+function setTimeMode(mode) {
+  state.timeMode = mode;
+  const isMonth = mode === 'month';
+  $('toggleMonthBtn').className = isMonth ? BTN_ON : BTN_OFF;
+  $('toggleDateRangeBtn').className = isMonth ? BTN_OFF : BTN_ON;
+  $('toggleMonthBtn').setAttribute('aria-pressed', isMonth);
+  $('toggleDateRangeBtn').setAttribute('aria-pressed', !isMonth);
+  $('monthSelectorWrapper').classList.toggle('hidden', !isMonth);
+  $('dateRangeWrapper').classList.toggle('hidden', isMonth);
+  $('dateRangeWrapper').classList.toggle('grid', !isMonth);
+  $('rangeHint').classList.toggle('hidden', isMonth);
+}
+
+function snapshotSettings() {
+  const g = getSelectedGroups();
+  return { l: state.selectedLocations.map(l => [l.id, l.name]), m: state.timeMode, mo: +$('monthSelect').value,
+           s: $('startDate').value, e: $('endDate').value, n: +$('minCountInput').value || 1, t: $('thresholdInput').value,
+           g: g.length === TAXON_GROUPS.length ? undefined : g };
+}
+function makeShareCode() {  // shares the settings of the search on screen, not whatever the controls say now
+  return btoa(unescape(encodeURIComponent(JSON.stringify(state.lastSearch || snapshotSettings())))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function readShareCode(c) {
+  c = c.trim().replace(/-/g, '+').replace(/_/g, '/');
+  while (c.length % 4) c += '=';
+  return JSON.parse(decodeURIComponent(escape(atob(c))));
+}
+function applyShared(o) {
+  const locs = (Array.isArray(o.l) ? o.l : []).filter(x => Array.isArray(x) && Number.isInteger(x[0]) && x[0] > 0)
+    .slice(0, CONFIG.MAX_LOCATIONS).map(x => ({ id: x[0], name: String(x[1] || 'Place ' + x[0]).slice(0, 80), display_name: String(x[1] || '') }));
+  if (!locs.length) { notify('That share code is not valid.'); return; }
+  state.selectedLocations = locs;
+  renderLocationChips();
+  const iso = /^\d{4}-\d{2}-\d{2}$/;
+  if (o.m === 'range' && iso.test(o.s) && iso.test(o.e)) { $('startDate').value = o.s; $('endDate').value = o.e; setTimeMode('range'); }
+  else if (/^(1[0-2]|[1-9])$/.test(String(o.mo))) { $('monthSelect').value = String(o.mo); setTimeMode('month'); }
+  if (Number.isInteger(o.n) && o.n >= 1 && o.n <= 500) $('minCountInput').value = o.n;
+  $('thresholdInput').value = /^\d{1,3}$/.test(String(o.t || '')) ? o.t : '';
+  setSelectedGroups(Array.isArray(o.g) ? o.g.filter(id => TAXON_GROUPS.some(g => g.id === id)) : null);
+  runAnalysis();
+}
+function loadCode(raw) {
+  try { applyShared(readShareCode(raw)); } catch (e) { notify('That share code is not valid. Copy the whole code and try again.'); }
+}
+function shareResults() {
+  if (!state.lastSearch) { notify('Run a search before sharing.'); return; }
+  $('shareText').value = `Open ${CONFIG.SITE_URL} , paste this code into the "Have a share code?" box, and click Load search:\n\n${makeShareCode()}`;
+  $('sharePanel').classList.remove('hidden');
+  $('shareText').focus();
+  $('shareText').select();
+}
+function copyShare() {
+  const ta = $('shareText');
+  ta.focus(); ta.select();
+  const done = () => notify('Copied. Paste it into an email or message.', 'ok');
+  const legacy = () => { try { if (document.execCommand('copy')) return done(); } catch (e) {} notify('Press Ctrl+C (Cmd+C on Mac) to copy the selected text.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, legacy); else legacy();
+}
+
+/* ---------- Locations ---------- */
+function addLocationTag(loc) {
+  if (state.selectedLocations.some(l => l.id === loc.id)) return;
+  if (state.selectedLocations.length >= CONFIG.MAX_LOCATIONS) { notify(`You can select up to ${CONFIG.MAX_LOCATIONS} locations at a time.`); return; }
+  state.selectedLocations.push(loc);
+  renderLocationChips();
+}
+function removeLocationTag(id) {
+  state.selectedLocations = state.selectedLocations.filter(l => l.id !== id);
+  renderLocationChips();
+}
+function renderLocationChips() {
+  const c = $('selectedLocationsContainer');
+  c.innerHTML = '';
+  if (!state.selectedLocations.length) {
+    c.innerHTML = '<span class="text-xs italic text-slate-600 py-1">No locations selected yet. Search above to add.</span>';
+    return;
+  }
+  state.selectedLocations.forEach(loc => {
+    const chip = document.createElement('span');
+    chip.className = 'inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 border border-brand-200 text-brand-800 rounded-full text-xs font-semibold';
+    chip.innerHTML = `<i class="fa-solid fa-location-dot text-brand-600 text-[11px]" aria-hidden="true"></i>
+      <span class="max-w-[180px] truncate">${escapeHtml(loc.name)}</span>
+      <button type="button" aria-label="Remove ${escapeHtml(loc.name)}" class="text-brand-600 hover:text-brand-900 ml-1 rounded-full text-xs"><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i></button>`;
+    chip.querySelector('button').addEventListener('click', () => removeLocationTag(loc.id));
+    c.appendChild(chip);
+  });
+}
+
+let acActive = -1, acItems = [];
+function closeAutocomplete() {
+  $('autocompleteResults').classList.add('hidden');
+  $('locationInput').setAttribute('aria-expanded', 'false');
+  $('locationInput').removeAttribute('aria-activedescendant');
+  acActive = -1;
+}
+function pickPlace(place) {
+  addLocationTag({ id: place.id, name: place.name, display_name: place.display_name || place.name });
+  $('locationInput').value = '';
+  closeAutocomplete();
+}
+function setActiveOption(i) {
+  const opts = $('autocompleteResults').querySelectorAll('[role=option]');
+  opts.forEach((o, idx) => { o.setAttribute('aria-selected', idx === i); o.classList.toggle('bg-slate-100', idx === i); });
+  acActive = i;
+  if (opts[i]) { $('locationInput').setAttribute('aria-activedescendant', opts[i].id); opts[i].scrollIntoView({ block: 'nearest' }); }
+}
+function renderAutocompleteDropdown(results) {
+  const box = $('autocompleteResults');
+  box.innerHTML = '';
+  acItems = results;
+  acActive = -1;
+  if (!results.length) {
+    box.innerHTML = '<div class="p-3 text-xs text-slate-600 italic">No matching places found</div>';
+  }
+  results.forEach((place, i) => {
+    const item = document.createElement('div');
+    item.id = 'ac-opt-' + i;
+    item.setAttribute('role', 'option');
+    item.setAttribute('aria-selected', 'false');
+    item.className = 'p-3 text-xs hover:bg-slate-50 cursor-pointer flex items-center justify-between';
+    item.innerHTML = `<div><div class="font-semibold text-slate-800">${escapeHtml(place.display_name || place.name)}</div>
+      <div class="text-[11px] text-slate-600 capitalize">${escapeHtml(place.place_type_name || 'Location')}</div></div>
+      <i class="fa-solid fa-plus text-slate-400 text-sm" aria-hidden="true"></i>`;
+    item.addEventListener('mousedown', e => { e.preventDefault(); pickPlace(place); });
+    box.appendChild(item);
+  });
+  box.classList.remove('hidden');
+  $('locationInput').setAttribute('aria-expanded', 'true');
+}
+
+/* ---------- Dates ---------- */
+function parseYMD(s) { const [y, m, d] = s.split('-').map(Number); return { y, m, d }; }
+function getActiveMonths() {
+  if (state.timeMode === 'month') return [parseInt($('monthSelect').value, 10)];
+  const s = $('startDate').value, e = $('endDate').value;
+  if (!s || !e) return [];
+  const a = parseYMD(s), b = parseYMD(e);          // parsed manually: no UTC shift
+  const span = (b.y - a.y) * 12 + (b.m - a.m);
+  if (span < 0) return [];
+  if (span >= 11) return [1,2,3,4,5,6,7,8,9,10,11,12];
+  const months = [];
+  for (let i = 0; i <= span; i++) months.push(((a.m - 1 + i) % 12) + 1);
+  return months;
+}
+
+/* ---------- Analysis ---------- */
+function getSelectedGroups() { return [...document.querySelectorAll('.group-check:checked')].map(c => c.value); }
+function setSelectedGroups(ids) {
+  const all = !Array.isArray(ids);
+  document.querySelectorAll('.group-check').forEach(c => { c.checked = all || ids.includes(c.value); });
+}
+function groupOf(t) {
+  const anc = t.ancestor_ids || [];
+  const g = TAXON_GROUPS.find(g => g.taxaIds.includes(t.iconic_taxon_id) || g.taxaIds.some(id => anc.includes(id)));
+  return g ? g.id : 'Other';
+}
+async function pool(items, fn, conc = CONFIG.CONCURRENCY, gap = 0) {
+  let i = 0;
+  await Promise.all(Array.from({ length: Math.min(conc, items.length) }, async () => {
+    while (i < items.length) { await fn(items[i++]); if (gap) await new Promise(r => setTimeout(r, gap)); }
+  }));
+}
+async function fetchHisto(placeIds, id) {
+  const h = await fetchJson(`${CONFIG.API}/observations/histogram?place_id=${placeIds}&taxon_id=${id}&date_field=observed&interval=month_of_year&${CONFIG.FILTERS}`);
+  const map = (h.results && h.results.month_of_year) || {};
+  return Array.from({ length: 12 }, (_, i) => map[i + 1] || 0);
+}
+// Top PER_GROUP per category + anything over the threshold; if over MAX_TOTAL, keep each category's top MIN_PER_GROUP then fill by score.
+function selectSpecies(scored, threshold) {
+  const rank = (a, b) => b.spikeScore - a.spikeScore || b.count - a.count;
+  const by = {}, keep = new Set(), must = new Set();
+  scored.forEach(s => (by[s.group] = by[s.group] || []).push(s));
+  Object.values(by).forEach(arr => {
+    arr.sort(rank);
+    arr.slice(0, CONFIG.PER_GROUP).forEach(s => keep.add(s));
+    arr.slice(0, CONFIG.MIN_PER_GROUP).forEach(s => must.add(s));
+  });
+  scored.forEach(s => { if (s.spikeScore >= threshold) keep.add(s); });
+  if (keep.size <= CONFIG.MAX_TOTAL) return [...keep];
+  const out = new Set(must);
+  [...keep].filter(s => !must.has(s)).sort(rank).forEach(s => { if (out.size < CONFIG.MAX_TOTAL) out.add(s); });
+  return [...out];
+}
+
+/* ===== [EBIRD-SWITCH] eBird bird data via GBIF: everything eBird-specific lives in this block ===== */
+function bboxToWkt(geo) {
+  const ring = geo && geo.coordinates && geo.coordinates[0];
+  if (!ring || !ring.length) return null;
+  const xs = ring.map(p => p[0]), ys = ring.map(p => p[1]);
+  const f = n => n.toFixed(4);
+  const w = f(Math.min(...xs)), e = f(Math.max(...xs)), s = f(Math.min(...ys)), n = f(Math.max(...ys));
+  return `POLYGON((${w} ${s},${e} ${s},${e} ${n},${w} ${n},${w} ${s}))`;   // counter-clockwise, as GBIF requires
+}
+const gbifFacet = (d, re) => { const f = (d.facets || []).find(x => re.test(String(x.field))); return f ? f.counts || [] : []; };
+// Scores birds from eBird records: window count / whole-year count, summed across the selected places.
+async function ebirdScore(minCount, activeMonths) {
+  const geos = await Promise.all(state.selectedLocations.map(async l => {
+    const p = ((await fetchJson(`${CONFIG.API}/places/${l.id}`)).results || [])[0] || {};
+    const wkt = bboxToWkt(p.bounding_box_geojson);
+    if (!wkt) throw new Error('No bounding box for ' + l.name);
+    return wkt;
+  }));
+  const y = new Date().getFullYear();
+  const yearPart = CONFIG.EBIRD_YEARS ? `&year=${y - CONFIG.EBIRD_YEARS + 1},${y}` : '';
+  state.ebirdBases = geos.map(w => `${CONFIG.GBIF}/occurrence/search?datasetKey=${CONFIG.EBIRD_DS}&geometry=${encodeURIComponent(w)}&occurrenceStatus=PRESENT${yearPart}`);
+  const win = new Map(), ann = new Map();
+  await pool(state.ebirdBases, async b => {
+    const d = await fetchJson(`${b}&taxonKey=212&${activeMonths.map(m => 'month=' + m).join('&')}&facet=speciesKey&facetLimit=${CONFIG.EBIRD_POOL}&limit=0`);
+    gbifFacet(d, /SPECIES/i).forEach(r => win.set(r.name, (win.get(r.name) || 0) + r.count));
+  });
+  const keys = [...win].filter(([, n]) => n >= minCount).map(([k]) => k), jobs = [];
+  for (let i = 0; i < keys.length; i += 40) state.ebirdBases.forEach(b => jobs.push({ b, ch: keys.slice(i, i + 40) }));
+  await pool(jobs, async ({ b, ch }) => {
+    const d = await fetchJson(`${b}&${ch.map(k => 'speciesKey=' + k).join('&')}&facet=speciesKey&facetLimit=${ch.length}&limit=0`);
+    gbifFacet(d, /SPECIES/i).forEach(r => ann.set(r.name, (ann.get(r.name) || 0) + r.count));
+  });
+  return keys.filter(k => ann.get(k) > 0).map(k => ({
+    src: 'ebird', gbifKey: k, count: win.get(k), annual: ann.get(k), group: 'Aves',
+    spikeScore: Math.min(100, Math.round(100 * win.get(k) / ann.get(k))),
+    taxon: { id: 'g' + k, name: k, iconic_taxon_id: 3, ancestor_ids: [] }
+  }));
+}
+async function ebirdMonthly(key) {
+  const out = Array(12).fill(0);
+  await pool(state.ebirdBases, async b => {
+    const d = await fetchJson(`${b}&speciesKey=${key}&facet=month&facetLimit=12&limit=0`);
+    gbifFacet(d, /MONTH/i).forEach(m => { const i = parseInt(m.name, 10); if (i >= 1 && i <= 12) out[i - 1] += m.count; });
+  }, 3, 0);
+  return out;
+}
+// For the birds we will show: get names from GBIF, match each to iNaturalist (photo, common name, link), load monthly graph.
+async function resolveEbirdItems(list) {
+  await pool(list, async s => {
+    let sci = String(s.gbifKey), vern = '';
+    try { const x = await fetchJson(`${CONFIG.GBIF}/species/${s.gbifKey}`); sci = x.canonicalName || x.scientificName || sci; vern = x.vernacularName || ''; } catch (e) {}
+    let t = null;
+    try {
+      const d = await fetchJson(`${CONFIG.API}/taxa?q=${encodeURIComponent(sci)}&taxon_id=3&rank=species&per_page=5`);
+      t = (d.results || []).find(r => r.name && r.name.toLowerCase() === sci.toLowerCase()) || null;
+    } catch (e) {}
+    s.taxon = t ? { ...t, iconic_taxon_id: 3 }
+      : { id: 'g' + s.gbifKey, name: sci, preferred_common_name: vern, default_photo: null, linkUrl: `https://www.gbif.org/species/${s.gbifKey}`, ancestor_ids: [], iconic_taxon_id: 3 };
+    if (isExcluded(s.taxon)) s.drop = true;
+    try { s.monthlyCounts = await ebirdMonthly(s.gbifKey); } catch (e) { s.monthlyCounts = null; }
+  }, 3, CONFIG.CHART_GAP_MS);
+}
+/* ===== end [EBIRD-SWITCH] block ===== */
+
+// Quietly swaps in a commercially licensed photo where one exists; otherwise the original photo stays.
+async function upgradePhotos(items) {
+  const isOpen = p => !!p && !!p.medium_url && CONFIG.OPEN_LICENSES.includes(String(p.license_code || '').toLowerCase());
+  const todo = items.filter(s => typeof s.taxon.id === 'number' && !isOpen(s.taxon.default_photo));   // [EBIRD-SWITCH] skip birds without an iNaturalist match
+  await pool(todo, async s => {
+    if (state.analyzedSpecies !== items) return;           // a newer search replaced these results
+    try {
+      const d = await fetchJson(`${CONFIG.API}/taxa/${s.taxon.id}`);
+      const t = d.results && d.results[0];
+      const better = ((t && t.taxon_photos) || []).map(tp => tp.photo).find(isOpen);
+      if (!better) return;
+      s.taxon.default_photo = better;
+      const el = document.querySelector(`[data-taxon="${s.taxon.id}"]`);
+      if (el) el.outerHTML = speciesCard(s, state.activeMonths);
+    } catch (e) { /* keep the original photo */ }
+  }, 2, CONFIG.CHART_GAP_MS);
+}
+
+async function runAnalysis() {
+  if (state.running) return;
+  if (!state.selectedLocations.length) { notify('Please select at least one location first.'); return; }
+  const activeMonths = getActiveMonths();
+  if (!activeMonths.length) { notify('Please select a valid start and end date (end must not be before start).'); return; }
+  if (state.timeMode === 'range') {
+    const a = parseYMD($('startDate').value), b = parseYMD($('endDate').value);
+    if ((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 864e5 > CONFIG.MAX_DAYS) {
+      notify(`Please choose a date range of ${CONFIG.MAX_DAYS} days or fewer.`); return;
+    }
+  }
+  const minCount = Math.max(1, Math.min(500, parseInt($('minCountInput').value, 10) || 1));
+  const sel = getSelectedGroups();
+  if (!sel.length) { notify('Choose at least one group of organisms under Advanced settings.'); return; }
+  const auto = Math.min(CONFIG.SPIKE_CAP, Math.round(100 * CONFIG.SPIKE_FACTOR * activeMonths.length / 12));
+  const typed = parseInt($('thresholdInput').value, 10);
+  const threshold = typed >= 1 && typed <= 100 ? typed : auto;
+
+  const settings = snapshotSettings();
+  const container = $('taxaAccordionContainer'), progressSection = $('progressSection'), btn = $('analyzeBtn');
+  const spin = t => `<i class="fa-solid fa-spinner animate-spin" aria-hidden="true"></i> ${t}`;
+  state.running = true;
+  btn.disabled = true;
+  $('bingoContainer').innerHTML = '';
+  $('bingoContainer').classList.add('hidden');
+  progressSection.classList.remove('hidden');
+  setProgress(5, spin('Finding species active in your time window...'));
+
+  try {
+    const placeIds = state.selectedLocations.map(l => l.id).join(',');
+    // [EBIRD-SWITCH] birds from eBird (falls back to iNaturalist automatically if anything goes wrong)
+    let ebScored = [], ebirdOK = false, birdNote = '';
+    if (sel.includes('Aves') && CONFIG.BIRD_SOURCE === 'ebird') {
+      setProgress(8, spin('Finding birds from eBird records...'));
+      try { ebScored = await ebirdScore(minCount, activeMonths); } catch (e) { console.warn('eBird route failed; using iNaturalist for birds', e); ebScored = []; }
+      ebirdOK = ebScored.length >= 3;
+      if (!ebirdOK) ebScored = [];
+      birdNote = ebirdOK ? ' • Birds: eBird records' : ' • Birds: iNaturalist (eBird data was not available for this search)';
+    }
+    // One candidate pool per category so small groups (fish, amphibians, fungi...) aren't crowded out by plants and insects
+    const base = `${CONFIG.API}/observations/species_counts?place_id=${placeIds}&month=${activeMonths.join(',')}&${CONFIG.FILTERS}`;
+    const jobs = TAXON_GROUPS.filter(g => sel.includes(g.id) && !(g.id === 'Aves' && ebirdOK)).map(g => g.taxaIds.length ? `${base}&taxon_id=${g.taxaIds.join(',')}&per_page=${CONFIG.GROUP_POOL}` : `${base}&per_page=${CONFIG.OTHER_POOL}`);
+    const seen = new Map();
+    let poolFailures = 0;
+    await pool(jobs, async u => {
+      try { ((await fetchJson(u)).results || []).forEach(r => { if (r.taxon && !seen.has(r.taxon.id)) seen.set(r.taxon.id, r); }); }
+      catch (e) { poolFailures++; console.warn('Category lookup failed', e); }
+    });
+    if (jobs.length && poolFailures === jobs.length) throw new Error('All category lookups failed');
+    const cands = [...seen.values()].filter(r => !isExcluded(r.taxon) && r.count >= minCount && sel.includes(groupOf(r.taxon)) && !(ebirdOK && groupOf(r.taxon) === 'Aves'));
+    if (!cands.length && !ebScored.length) {
+      container.innerHTML = '<div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-600">No species found for this filter combination. Try lowering the minimum observations or choosing a different place or time.</div>';
+      $('resultsHeader').classList.add('hidden');
+      progressSection.classList.add('hidden');
+      return;
+    }
+
+    // Whole-year totals in bulk (fallback: per-species histogram)
+    setProgress(15, spin('Scoring seasonal spikes...'));
+    const annual = {}, chunks = [];
+    for (let i = 0; i < cands.length; i += CONFIG.CHUNK) chunks.push(cands.slice(i, i + CONFIG.CHUNK));
+    let step = 0;
+    await pool(chunks, async ch => {
+      try {
+        const d = await fetchJson(`${CONFIG.API}/observations/species_counts?place_id=${placeIds}&taxon_id=${ch.map(c => c.taxon.id).join(',')}&per_page=${ch.length}&${CONFIG.FILTERS}`);
+        (d.results || []).forEach(r => { annual[r.taxon.id] = r.count; });
+      } catch (e) { console.warn('Bulk lookup failed; using fallback', e); }
+      setProgress(15 + 25 * (++step / chunks.length));
+    });
+    const missing = cands.filter(c => !annual[c.taxon.id]);
+    await pool(missing, async c => {
+      try { c.monthlyCounts = await fetchHisto(placeIds, c.taxon.id); annual[c.taxon.id] = c.monthlyCounts.reduce((a, b) => a + b, 0); } catch (e) {}
+    });
+    const scored = cands.filter(c => annual[c.taxon.id] > 0).map(c => {
+      c.spikeScore = Math.min(100, Math.round(100 * c.count / annual[c.taxon.id]));
+      c.group = groupOf(c.taxon);
+      return c;
+    });
+    const picked = selectSpecies(scored.concat(ebScored), threshold);   // [EBIRD-SWITCH] eBird birds join the same selection rules
+    const ebPicked = picked.filter(i => i.src === 'ebird');
+    if (ebPicked.length) { setProgress(38, spin('Matching birds to photos and names...')); await resolveEbirdItems(ebPicked); }
+    const items = picked.filter(i => !i.drop);
+    if (!items.length) { notify('Could not score species right now. Please try again in a moment.'); progressSection.classList.add('hidden'); return; }
+
+    // Monthly charts for the species we will show
+    state.activeMonths = activeMonths;
+    state.placeIds = placeIds;
+    setProgress(40, spin('Drawing monthly graphs...'));
+    let done = 0;
+    const loadChart = async c => {
+      if (c.monthlyCounts || c.src === 'ebird') return;   // [EBIRD-SWITCH] eBird graphs are loaded earlier
+      try { c.monthlyCounts = await fetchHisto(placeIds, c.taxon.id); }
+      catch (e) { console.warn('Graph failed for', c.taxon.name, e.message); }
+    };
+    await pool(items, async c => { await loadChart(c); setProgress(40 + 50 * (++done / items.length)); }, CONFIG.CHART_CONCURRENCY, CONFIG.CHART_GAP_MS);
+    const retry = items.filter(c => !c.monthlyCounts);
+    if (retry.length) {
+      setProgress(90, spin(`Retrying ${retry.length} graph(s) more slowly...`));
+      await pool(retry, loadChart, 1, CONFIG.RETRY_GAP_MS);
+    }
+    items.forEach(c => { c.maxMonthCount = c.monthlyCounts ? Math.max(1, ...c.monthlyCounts) : 1; });
+    const failed = items.filter(c => !c.monthlyCounts).length;
+
+    state.analyzedSpecies = items;
+    state.lastSearch = settings;
+    setProgress(100, '<i class="fa-solid fa-check text-emerald-600" aria-hidden="true"></i> Done!');
+    setTimeout(() => progressSection.classList.add('hidden'), 800);
+
+    const grouped = {};
+    TAXON_GROUPS.forEach(g => grouped[g.id] = []);
+    items.forEach(i => grouped[i.group].push(i));
+
+    container.innerHTML = '';
+    $('resultsHeader').classList.remove('hidden');
+    $('resultsTitle').textContent = `Analysis Results (${items.length} species)`;
+    $('resultsSubtitle').textContent = `Locations: ${state.selectedLocations.map(l => l.name).join(', ')} • Top ${CONFIG.PER_GROUP} per group, plus anything with a Spike Score of ${threshold}% or more (max ${CONFIG.MAX_TOTAL} species)` +
+      birdNote +
+      (sel.length < TAXON_GROUPS.length ? ` • Groups: ${TAXON_GROUPS.filter(g => sel.includes(g.id)).map(g => g.name).join(', ')}` : '') +
+      (failed ? ` • ${failed} monthly graph(s) couldn't load; use Retry on those cards.` : '') +
+      (poolFailures ? ` • ${poolFailures} group lookup(s) failed, so some groups may be incomplete. Try again.` : '');
+
+    TAXON_GROUPS.forEach(group => {
+      const list = grouped[group.id];
+      if (!list.length) return;
+      list.sort((a, b) => b.spikeScore - a.spikeScore || b.count - a.count);
+      const details = document.createElement('details');
+      details.className = 'taxon-details bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm';
+      details.setAttribute('open', '');
+      details.innerHTML = `
+        <summary class="p-4 bg-slate-100 border-b border-slate-200 flex items-center justify-between font-bold text-slate-700 cursor-pointer select-none hover:bg-slate-200/60 transition">
+          <div class="flex items-center space-x-2">
+            <span class="p-2 rounded-lg border ${group.color}"><i class="fa-solid ${group.icon}" aria-hidden="true"></i></span>
+            <span>${group.name} (${list.length})</span>
+          </div>
+          <i class="chev fa-solid fa-chevron-down text-slate-500" aria-hidden="true"></i>
+        </summary>
+        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">${list.map(s => speciesCard(s, activeMonths)).join('')}</div>`;
+      container.appendChild(details);
+    });
+    if (CONFIG.PREFER_OPEN_PHOTOS) upgradePhotos(items);
+  } catch (err) {
+    console.error(err);
+    notify('Failed to retrieve data from iNaturalist. Check your network connection and try again.');
+    progressSection.classList.add('hidden');
+  } finally {
+    state.running = false;
+    btn.disabled = false;
+  }
+}
+
+function speciesCard(s, activeMonths) {
+  const t = s.taxon;
+  const name = t.preferred_common_name || t.name;
+  const taxonUrl = t.linkUrl || `https://www.inaturalist.org/taxa/${encodeURIComponent(t.id)}`;   // [EBIRD-SWITCH]
+  const unit = s.src === 'ebird' ? 'report' : 'sighting';   // [EBIRD-SWITCH]
+  const site = t.linkUrl ? 'GBIF' : 'iNaturalist';
+  const photoUrl = usablePhoto(t, 'medium_url');
+  const photo = photoUrl ? t.default_photo : null;
+  const imgTag = photoUrl
+    ? `<img src="${escapeHtml(photoUrl)}" alt="${escapeHtml(name)}" class="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border border-slate-200 shadow-sm shrink-0 group-hover:scale-105 transition-transform duration-300">`
+    : `<div class="w-24 h-24 sm:w-28 sm:h-28 bg-slate-100 text-slate-500 rounded-xl border border-slate-200 flex flex-col items-center justify-center shrink-0"><i class="fa-solid fa-image text-2xl" aria-hidden="true"></i><span class="text-[11px] mt-1 text-center">No Photo</span></div>`;
+  const credit = photo && photo.attribution
+    ? `<div class="text-[11px] text-slate-500 mt-1 truncate" title="${escapeHtml(photo.attribution)}">Photo: ${escapeHtml(photo.attribution)}</div>` : '';
+
+  const counts = s.monthlyCounts;
+  let chart;
+  if (!counts) {
+    chart = `<div class="text-xs text-slate-700 py-2">Monthly graph couldn't load. <button type="button" data-retry="${t.id}" class="underline font-semibold text-brand-700">Retry</button></div>`;
+  } else {
+    const max = s.maxMonthCount || 1;
+    const summary = counts.map((c, i) => `${MONTH_NAMES[i]} ${c}`).join(', ');
+    const bars = counts.map((cnt, i) => {
+      const target = activeMonths.includes(i + 1);
+      const h = cnt === 0 ? 3 : Math.max(10, Math.round((cnt / max) * 100));
+      return `<div class="flex flex-col items-center flex-1 h-full justify-end" title="${MONTH_NAMES[i]}: ${cnt} obs" aria-hidden="true">
+        <div class="w-full h-9 flex items-end"><div class="w-full ${target ? 'bg-brand-600' : 'bg-slate-300'} border border-slate-700 rounded-t" style="height:${h}%"></div></div>
+        <span class="text-[11px] ${target ? 'font-bold text-brand-700' : 'text-slate-600'} mt-0.5 leading-none">${MONTH_NAMES[i][0]}</span></div>`;
+    }).join('');
+    chart = `<span class="sr-only">Observations by month: ${summary}</span>
+      <div class="flex items-end gap-1 h-14 bg-slate-50 px-2 py-1.5 rounded-xl border border-slate-200/70">${bars}</div>`;
+  }
+  const score = s.spikeScore + '%';
+
+  return `<div data-taxon="${t.id}" class="p-4 bg-white hover:bg-slate-50/80 rounded-2xl transition-all border border-slate-200 flex flex-col justify-between space-y-4 hover:shadow-sm">
+    <div class="flex items-start space-x-3 sm:space-x-4">
+      <a href="${taxonUrl}" target="_blank" rel="noopener" class="group block overflow-hidden rounded-xl shrink-0" aria-label="${escapeHtml(name)} on ${site}">${imgTag}</a>
+      <div class="flex-1 min-w-0">
+        <a href="${taxonUrl}" target="_blank" rel="noopener" class="font-bold text-base sm:text-lg text-slate-800 hover:text-brand-600 transition leading-tight block truncate">${escapeHtml(name)}</a>
+        <div class="text-xs italic text-slate-600 mt-0.5 truncate">${escapeHtml(t.name)}</div>
+        <div class="mt-3 flex items-center gap-2 flex-wrap">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-brand-50 text-brand-800 font-bold text-xs rounded-lg border border-brand-200"><i class="fa-solid fa-bolt text-brand-600 text-[11px]" aria-hidden="true"></i> Spike Score: ${score}</span>
+          <span class="text-xs font-medium text-slate-600">(${s.count} ${unit}${s.count === 1 ? '' : 's'} in your dates)</span>
+        </div>
+        <div class="text-xs text-slate-600 mt-1.5">${s.spikeScore}% of its yearly ${unit}s happen in your dates</div>
+        ${credit}
+      </div>
+    </div>
+    <div class="pt-2 border-t border-slate-100">
+      <div class="text-xs font-semibold text-slate-600 mb-1.5 flex items-center justify-between">
+        <span>Annual 12-Month Distribution</span>
+        <a href="${taxonUrl}" target="_blank" rel="noopener" class="text-brand-700 hover:underline">View on ${site} <i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i></a>
+      </div>${chart}
+    </div></div>`;
+}
+
+/* ---------- Bingo ---------- */
+function generateBingoCards() {
+  const list = state.analyzedSpecies.filter(s => usablePhoto(s.taxon, 'square_url'));
+  if (list.length < CONFIG.BINGO_SPECIES) {
+    notify(`Bingo cards need at least ${CONFIG.BINGO_SPECIES} species with photos (24 plus a FREE space). Currently found: ${list.length}. Try lowering the minimum observations or broadening your location or dates.`);
+    return;
+  }
+  const box = $('bingoContainer');
+  box.classList.remove('hidden');
+  const total = Math.max(1, Math.min(CONFIG.BINGO_CARDS, parseInt($('bingoCount').value, 10) || CONFIG.BINGO_CARDS));
+  const names = escapeHtml(state.selectedLocations.map(l => l.name).join(', '));
+  const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  let html = `<div class="no-print p-4 bg-amber-50 border border-amber-200 rounded-2xl mb-6 flex flex-wrap gap-3 items-center justify-between">
+    <div><h3 class="font-bold text-amber-900 text-sm">${total} Classroom Bingo Card${total === 1 ? '' : 's'} Generated!</h3>
+    <p class="text-xs text-amber-800">Print below for ${total} randomized 5x5 student card${total === 1 ? '' : 's'} (1 per page).</p></div>
+    <button onclick="printMode(true)" class="px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs rounded-xl shadow-sm transition"><i class="fa-solid fa-print mr-1" aria-hidden="true"></i> Print ${total === 1 ? 'the Card' : 'All ' + total + ' Cards'}</button></div>`;
+
+  for (let n = 1; n <= total; n++) {
+    const picks = shuffle(list).slice(0, CONFIG.BINGO_SPECIES);
+    let cells = '', k = 0;
+    for (let c = 0; c < 25; c++) {
+      if (c === 12) {
+        cells += `<div class="p-1 flex flex-col items-center justify-center rounded-lg bg-gradient-to-r from-brand-900 via-brand-800 to-emerald-800" style="-webkit-print-color-adjust:exact;print-color-adjust:exact"><div class="p-2 bg-white/10 rounded-xl border border-white/20"><i class="fa-solid fa-leaf text-2xl text-emerald-300" aria-hidden="true"></i></div><span class="text-[11px] font-bold text-emerald-100 mt-1">FREE</span></div>`;
+      } else {
+        const t = picks[k++].taxon, nm = t.preferred_common_name || t.name, img = usablePhoto(t, 'square_url');
+        const imgHtml = img
+          ? `<img src="${escapeHtml(img)}" alt="" class="w-10 h-10 object-cover rounded-md mb-1 border border-slate-200">`
+          : `<div class="w-10 h-10 bg-slate-100 rounded-md mb-1 flex items-center justify-center text-slate-500 text-xs"><i class="fa-solid fa-leaf" aria-hidden="true"></i></div>`;
+        cells += `<div class="border border-slate-200 p-1.5 flex flex-col items-center justify-between text-center rounded-lg bg-white overflow-hidden">${imgHtml}<span class="text-[11px] font-bold text-slate-800 leading-tight">${escapeHtml(nm)}</span></div>`;
+      }
+    }
+    html += `<div class="print-page-break bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
+        <div><h2 class="text-xl font-black text-brand-900 tracking-wider">NATURE EXPLORER BINGO</h2>
+        <p class="text-xs text-slate-600 font-semibold">${names} • Student Card #${n}</p></div>
+        <div class="text-right text-xs text-slate-600">Find &amp; Check 5 in a Row!</div></div>
+      <div class="flex gap-6 text-xs font-semibold text-slate-700 mb-3 max-w-lg mx-auto"><div class="flex-1 flex items-end gap-1">Name: <span class="flex-1 border-b border-slate-500">&nbsp;</span></div><div class="w-40 flex items-end gap-1">Date: <span class="flex-1 border-b border-slate-500">&nbsp;</span></div></div>
+      <div class="grid grid-cols-5 gap-1.5 aspect-square max-w-lg mx-auto">${cells}</div>
+      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600"><span>iNaturalist Classroom Bio-Data Tool</span><span>Center square is free</span></div>
+      <p class="mt-2 text-[11px] text-slate-600 text-center">Look, don't touch or taste. Some plants and mushrooms are poisonous.</p></div>`;
+  }
+  box.innerHTML = html;
+  box.scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ===== [LOCATE] "Use my location": three nearest U.S. counties (IP address + Census boundaries) -> iNaturalist places ===== */
+const CENSUS_COUNTY_URL = 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/82/query';
+const STATE_ABBR = {'01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY','60':'AS','66':'GU','69':'MP','72':'PR','78':'VI'};
+let turfPromise = null;
+function loadTurf() {   // the mapping library is only downloaded when the button is used
+  if (window.turf) return Promise.resolve();
+  if (!turfPromise) turfPromise = new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js';
+    sc.onload = res;
+    sc.onerror = () => { turfPromise = null; rej(new Error('Map library did not load')); };
+    document.head.appendChild(sc);
+  });
+  return turfPromise;
+}
+function distanceToCounty(point, poly) {
+  try { if (turf.booleanPointInPolygon(point, poly)) return 0; return turf.pointToLineDistance(point, turf.polygonToLine(poly), { units: 'miles' }); }
+  catch (_) { return turf.distance(point, turf.centroid(poly), { units: 'miles' }); }
+}
+async function countiesNear(lon, lat) {
+  let list = [];
+  for (const pad of [0.35, 0.8, 1.6, 3.2]) {
+    const url = new URL(CENSUS_COUNTY_URL);
+    const p = { where: '1=1', geometry: JSON.stringify({ xmin: lon - pad, ymin: lat - pad, xmax: lon + pad, ymax: lat + pad, spatialReference: { wkid: 4326 } }),
+      geometryType: 'esriGeometryEnvelope', inSR: '4326', spatialRel: 'esriSpatialRelIntersects', outFields: 'GEOID,STATE,NAME,BASENAME',
+      returnGeometry: 'true', outSR: '4326', maxAllowableOffset: '0.002', f: 'geojson' };   // simplified outlines keep the download small
+    Object.entries(p).forEach(([k, v]) => url.searchParams.set(k, v));
+    list = (await fetchJson(url.toString())).features || [];
+    if (list.length >= CONFIG.MAX_LOCATIONS) break;
+  }
+  return list;
+}
+const normPlace = s => String(s || '').toLowerCase().replace(/\b(county|parish|borough|census area|municipality)\b/g, '').replace(/[^a-z]/g, '');
+// Matches one Census county to its iNaturalist place (name + state + closeness of centers). Returns null if not confident.
+async function matchInatCounty(f) {
+  const abbr = STATE_ABBR[f.properties.STATE] || '';
+  const base = normPlace(f.properties.NAME || f.properties.BASENAME);
+  const cen = turf.centroid(f).geometry.coordinates;   // [lon, lat]
+  const q = String(f.properties.BASENAME || f.properties.NAME || '').trim();
+  let d;
+  try { d = await fetchJson(`${CONFIG.API}/places/autocomplete?q=${encodeURIComponent(q)}&per_page=30`); } catch (e) { return null; }
+  const cands = (d.results || []).map(p => {
+    const c = String(p.location || '').split(',').map(Number);
+    const km = c.length === 2 && isFinite(c[0]) ? turf.distance(turf.point(cen), turf.point([c[1], c[0]]), { units: 'kilometers' }) : null;
+    const stateOk = new RegExp('(^|,\\s*)' + abbr + '(,|$)').test(p.display_name || '');
+    const nameOk = normPlace(p.name) === base || normPlace(String(p.display_name || '').split(',')[0]) === base;
+    const typeOk = /county|parish|borough|census|municipality/i.test(p.place_type_name || '');
+    return { p, km, score: (stateOk ? 4 : 0) + (nameOk ? 2 : 0) + (typeOk ? 1 : 0) };
+  }).sort((a, b) => b.score - a.score || (a.km ?? 1e9) - (b.km ?? 1e9));
+  const best = cands[0];
+  if (!best || best.score < 6 || (best.km !== null && best.km > 100)) return null;
+  return { id: best.p.id, name: `${best.p.name}, ${abbr}`, display_name: best.p.display_name || best.p.name };
+}
+async function useMyLocation() {
+  const btn = $('locateBtn');
+  if (btn.disabled) return;
+  const label = btn.innerHTML;
+  btn.disabled = true; btn.textContent = 'Locating...';
+  try {
+    await loadTurf();
+    const g = await fetchJson('https://get.geojs.io/v1/ip/geo.json');
+    const lat = parseFloat(g.latitude), lon = parseFloat(g.longitude);
+    if (!isFinite(lat) || !isFinite(lon)) throw new Error('Could not determine your location.');
+    if (g.country_code && g.country_code !== 'US') { notify('"Use my location" only works for U.S. counties right now. Please search for your area instead.'); return; }
+    const point = turf.point([lon, lat]);
+    const counties = await countiesNear(lon, lat);
+    if (!counties.length) { notify('No county data was found for your location. Please search for your area instead.'); return; }
+    const top = counties.map(f => ({ f, d: distanceToCounty(point, f) })).sort((a, b) => a.d - b.d).slice(0, CONFIG.MAX_LOCATIONS);
+    const found = [];
+    for (const x of top) { const m = await matchInatCounty(x.f); if (m && !found.some(l => l.id === m.id)) found.push(m); }
+    if (!found.length) { notify("Couldn't match your nearby counties to iNaturalist places. Please search for your area instead."); return; }
+    state.selectedLocations = found;
+    renderLocationChips();
+    notify(`Added ${found.map(l => l.name).join('; ')}, based on your internet address. This is approximate (a VPN can throw it off). You can remove or change them before searching.`, 'ok');
+  } catch (e) {
+    console.warn('Use my location failed', e);
+    notify('Could not find your location right now. Please search for your area instead.');
+  } finally {
+    btn.disabled = false; btn.innerHTML = label;
+  }
+}
+/* ===== end [LOCATE] block ===== */
+
+/* ---------- Init ---------- */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeMode('month');
+  renderLocationChips();
+  $('groupChecks').innerHTML = TAXON_GROUPS.map(g => `<label class="inline-flex items-center gap-1.5"><input type="checkbox" class="group-check accent-green-600" value="${g.id}" checked><i class="fa-solid ${g.icon} text-slate-500" aria-hidden="true"></i><span>${g.name}</span></label>`).join('');
+  $('taxaAccordionContainer').addEventListener('click', async e => {
+    const btn = e.target.closest('[data-retry]');
+    const card = btn && btn.closest('[data-taxon]');
+    const sp = btn && state.analyzedSpecies.find(x => String(x.taxon.id) === btn.dataset.retry);
+    if (!sp || !card) return;
+    btn.disabled = true; btn.textContent = 'Retrying...';
+    try {
+      sp.monthlyCounts = sp.src === 'ebird' ? await ebirdMonthly(sp.gbifKey) : await fetchHisto(state.placeIds, sp.taxon.id);   // [EBIRD-SWITCH]
+      sp.maxMonthCount = Math.max(1, ...sp.monthlyCounts);
+      card.outerHTML = speciesCard(sp, state.activeMonths);
+    } catch (err) {
+      console.warn('Retry failed', err.message);
+      btn.disabled = false; btn.textContent = 'Retry';
+      notify('Still could not load that graph. iNaturalist may be busy, so try again in a minute.');
+    }
+  });
+  $('groupsAllBtn').addEventListener('click', () => setSelectedGroups(null));
+  $('groupsNoneBtn').addEventListener('click', () => setSelectedGroups([]));
+
+  $('toggleMonthBtn').addEventListener('click', () => setTimeMode('month'));
+  $('toggleDateRangeBtn').addEventListener('click', () => setTimeMode('range'));
+  $('expandAllBtn').addEventListener('click', () => toggleAllAccordions(true));
+  $('collapseAllBtn').addEventListener('click', () => toggleAllAccordions(false));
+  $('printBtn').addEventListener('click', () => printMode(false));
+  $('shareBtn').addEventListener('click', shareResults);
+  $('bingoBtn').addEventListener('click', generateBingoCards);
+  $('analyzeBtn').addEventListener('click', runAnalysis);
+  $('locateBtn').addEventListener('click', useMyLocation);   // [LOCATE]
+  window.addEventListener('beforeprint', () => { if (!document.body.classList.contains('print-bingo')) toggleAllAccordions(true); });
+
+  $('loadCodeBtn').addEventListener('click', () => loadCode($('codeInput').value));
+  $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') loadCode($('codeInput').value); });
+  $('copyShareBtn').addEventListener('click', copyShare);
+  $('closeShareBtn').addEventListener('click', () => $('sharePanel').classList.add('hidden'));
+  const urlCode = new URLSearchParams(location.search).get('code'); // works if the page is hosted outside Google Sites
+  if (urlCode) loadCode(urlCode);
+
+  // Autocomplete with cancellation + keyboard support
+  const input = $('locationInput');
+  let timer, ctl;
+  input.addEventListener('input', e => {
+    const q = e.target.value.trim();
+    clearTimeout(timer);
+    if (ctl) ctl.abort();
+    if (q.length < 2) { closeAutocomplete(); $('locationSpinner').classList.add('hidden'); return; }
+    $('locationSpinner').classList.remove('hidden');
+    timer = setTimeout(async () => {
+      ctl = new AbortController();
+      try {
+        const d = await fetchJson(`${CONFIG.API}/places/autocomplete?q=${encodeURIComponent(q)}&per_page=6`, ctl.signal, 1);
+        renderAutocompleteDropdown(d.results || []);
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('Location search failed:', err);
+      } finally {
+        if (!ctl.signal.aborted) $('locationSpinner').classList.add('hidden');
+      }
+    }, 300);
+  });
+  input.addEventListener('keydown', e => {
+    const open = !$('autocompleteResults').classList.contains('hidden');
+    if (!open || !acItems.length) { if (e.key === 'Escape') closeAutocomplete(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveOption((acActive + 1) % acItems.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveOption((acActive - 1 + acItems.length) % acItems.length); }
+    else if (e.key === 'Enter' && acActive >= 0) { e.preventDefault(); pickPlace(acItems[acActive]); }
+    else if (e.key === 'Escape') closeAutocomplete();
+  });
+  document.addEventListener('mousedown', e => {
+    if (!input.contains(e.target) && !$('autocompleteResults').contains(e.target)) closeAutocomplete();
+  });
+});
+/* ---------- Random Amazon Affiliate Banner ---------- */
+(function () {
+  var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdgTWdO6y06ti58nsEUAxI8HPpcWfDs_vi56goMTGcaFzVAno4oDusDW8jF9KWNa7xm9U3cOYGHOXd/pub?output=csv";
+
+  var SAMPLE_CSV =
+    'Title,Description,AffiliateURL,ImageURL,ButtonText\n' +
+    'Macro Lens for Phones,"Research-grade insect & fungi photos on your phone.",https://example.com/lens,,Shop on Amazon\n' +
+    '10x Triplet Loupe,"Distortion-free glass for lichen & moss ID.",https://example.com/loupe,"data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2742%27 cy=%2742%27 r=%2728%27 fill=%27none%27 stroke=%27%232e7d32%27 stroke-width=%278%27/%3E%3Cpath d=%27M64 64L90 90%27 stroke=%27%232e7d32%27 stroke-width=%278%27 stroke-linecap=%27round%27/%3E%3C/svg%3E",View on Amazon\n' +
+    'Waterproof Field Notebook,"Rite-in-the-rain paper for muddy, wet days.",https://example.com/notebook,,See It on Amazon';
+
+  function parseCSV(text) {
+    var rows = [], row = [], val = "", q = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i], n = text[i + 1];
+      if (c === '"' && q && n === '"') { val += '"'; i++; }
+      else if (c === '"') { q = !q; }
+      else if (c === ',' && !q) { row.push(val.trim()); val = ""; }
+      else if ((c === '\n' || c === '\r') && !q) {
+        if (val || row.length) { row.push(val.trim()); rows.push(row); }
+        row = []; val = "";
+        if (c === '\r' && n === '\n') i++;
+      } else { val += c; }
+    }
+    if (val || row.length) { row.push(val.trim()); rows.push(row); }
+    return rows;
+  }
+
+  function render(csvText) {
+    var rows = parseCSV(csvText);
+    if (rows.length < 2) return;
+    var headers = rows[0].map(function (h) { return h.toLowerCase(); });
+    var urlIdx = headers.indexOf("affiliateurl");
+    if (urlIdx < 0) return;
+    var items = rows.slice(1).filter(function (r) { return /^https?:\/\//i.test(r[urlIdx] || ""); });
+    if (!items.length) return;
+
+    var pick = items[Math.floor(Math.random() * items.length)];
+    function col(name) { var i = headers.indexOf(name); return i < 0 ? "" : (pick[i] || ""); }
+
+    var title = col("title"), url = col("affiliateurl"), img = col("imageurl");
+    document.getElementById("aff-title").textContent = title;
+    document.getElementById("aff-title").href = url;
+    document.getElementById("aff-desc").textContent = col("description");
+    var btn = document.getElementById("aff-btn");
+    btn.textContent = col("buttontext") || "Shop on Amazon";
+    btn.href = url;
+
+    var imgEl = document.getElementById("aff-img");
+    if (img) { imgEl.src = img; imgEl.alt = title; imgEl.style.display = "block"; }
+
+    document.getElementById("aff-banner").style.display = "block";
+  }
+
+  if (CSV_URL.indexOf("YOUR_PUBLISHED") === 0) { render(SAMPLE_CSV); return; }
+
+  fetch(CSV_URL)
+    .then(function (r) { return r.text(); })
+    .then(render)
+    .catch(function (e) { console.error("Affiliate banner failed to load:", e); });
+})();
+</script>
+</body>
+</html>
