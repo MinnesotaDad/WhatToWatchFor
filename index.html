@@ -351,7 +351,7 @@ function notify(msg, kind) {
 }
 
 function escapeHtml(s) {
-  return String(s ?? '').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"').replace(/'/g,''');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 const CACHE = new Map(), CACHE_MS = 15 * 60 * 1000;
