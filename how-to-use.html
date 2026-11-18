@@ -26,6 +26,16 @@ html, body { width:100%; min-height:100%; margin:0; padding:0; overflow-x:hidden
 ::-webkit-scrollbar { width:6px; height:6px; }
 ::-webkit-scrollbar-track { background:#f1f5f9; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+#aff-banner { max-width: 728px; margin: 20px auto; border: 1px solid #d5d9d9; border-radius: 8px; padding: 16px; background: #f8faf9; color: #0f1111; font-family: system-ui, -apple-system, sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: none; box-sizing: border-box; }
+#aff-banner .aff-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+#aff-banner img { width: 110px; height: 110px; object-fit: contain; border-radius: 6px; background: #fff; padding: 4px; display: none; }
+#aff-banner .aff-body { flex: 1; min-width: 200px; }
+#aff-banner .aff-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #565959; margin-bottom: 4px; }
+#aff-banner .aff-title { font-size: 18px; font-weight: 700; color: #0f1111; text-decoration: none; display: block; margin-bottom: 6px; }
+#aff-banner .aff-desc { font-size: 14px; color: #333; margin: 0 0 12px; line-height: 1.4; }
+#aff-banner .aff-btn { display: inline-block; background: #ffd814; border: 1px solid #fcd200; color: #0f1111; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 20px; text-decoration: none; }
+#aff-banner .aff-disclosure { font-size: 11px; color: #565959; margin: 12px 0 0; padding-top: 8px; border-top: 1px solid #e3e6e6; }
+@media print { .no-print { display: none !important; } }
 </style>
 <style id="fallbackCss" media="not all">
 /* Basic styling used only when the Tailwind CDN is blocked */
@@ -189,6 +199,19 @@ a{color:#15803d}
     </a>
   </section>
 
+  <!-- Random Amazon Affiliate Banner -->
+<div id="aff-banner" class="no-print">
+    <div class="aff-row">
+      <img id="aff-img" src="" alt="" />
+      <div class="aff-body">
+        <div class="aff-label">Field Gear Pick • Affiliate Link</div>
+        <a id="aff-title" class="aff-title" href="#" target="_blank" rel="nofollow sponsored noopener"></a>
+        <p id="aff-desc" class="aff-desc"></p>
+        <a id="aff-btn" class="aff-btn" href="#" target="_blank" rel="nofollow sponsored noopener"></a>
+      </div>
+    </div>
+    <p class="aff-disclosure">As an Amazon Associate, I receive a small commission from qualifying purchases.</p>
+  </div>
 </main>
 
 <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-600 no-print">
@@ -198,5 +221,86 @@ a{color:#15803d}
   </div>
 </footer>
 
+<script>
+(function () {
+  var SHEET_ID = "1tEyoKjIdn7AIgCjPN3nbBeFe_SzrxaHfR0hVgITfoBc";
+  // Try CORS-friendly CSV endpoints in order (the /edit URL returns an HTML page, not CSV)
+  var CSV_URLS = [
+    "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:csv&headers=1&gid=0",
+    "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/export?format=csv&gid=0"
+  ];
+
+  function parseCSV(text) {
+    var rows = [], row = [], val = "", q = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i], n = text[i + 1];
+      if (c === '"' && q && n === '"') { val += '"'; i++; }
+      else if (c === '"') { q = !q; }
+      else if (c === ',' && !q) { row.push(val.trim()); val = ""; }
+      else if ((c === '\n' || c === '\r') && !q) {
+        if (val || row.length) { row.push(val.trim()); rows.push(row); }
+        row = []; val = "";
+        if (c === '\r' && n === '\n') i++;
+      } else { val += c; }
+    }
+    if (val || row.length) { row.push(val.trim()); rows.push(row); }
+    return rows;
+  }
+
+  function render(csvText) {
+    var rows = parseCSV(csvText);
+    if (rows.length < 2) return;
+    // Normalize headers so "Affiliate URL", "affiliate_url", "AffiliateURL" all match
+    var headers = rows[0].map(function (h) { return h.toLowerCase().replace(/[^a-z]/g, ""); });
+    var urlIdx = headers.indexOf("affiliateurl");
+    if (urlIdx < 0) urlIdx = headers.indexOf("url");
+    if (urlIdx < 0) urlIdx = headers.indexOf("link");
+    var data = rows.slice(1);
+    if (urlIdx < 0) {   // header row missing/unreadable: find the column that holds http links
+      var all = rows;
+      for (var c = 0; c < (rows[0] || []).length && urlIdx < 0; c++) {
+        if (all.some(function (r) { return /^https?:\/\/(www\.)?(amazon\.|amzn\.)/i.test(r[c] || ""); })) urlIdx = c;
+      }
+      if (urlIdx < 0) { console.warn("Affiliate banner: no URL column found. Headers seen:", rows[0]); return; }
+      headers = ["title", "description", "affiliateurl", "imageurl", "buttontext"];  // assume documented column order
+      urlIdx = headers.indexOf("affiliateurl");
+      data = rows;
+    }
+    var items = data.filter(function (r) { return /^https?:\/\//i.test(r[urlIdx] || ""); });
+    if (!items.length) { console.warn("Affiliate banner: no rows with an http(s) link."); return; }
+
+    var pick = items[Math.floor(Math.random() * items.length)];
+    function col(name) { var i = headers.indexOf(name); return i < 0 ? "" : (pick[i] || ""); }
+
+    var title = col("title"), url = col("affiliateurl"), img = col("imageurl");
+    document.getElementById("aff-title").textContent = title;
+    document.getElementById("aff-title").href = url;
+    document.getElementById("aff-desc").textContent = col("description");
+    var btn = document.getElementById("aff-btn");
+    btn.textContent = col("buttontext") || "Shop on Amazon";
+    btn.href = url;
+
+    var imgEl = document.getElementById("aff-img");
+    if (img) { imgEl.src = img; imgEl.alt = title; imgEl.style.display = "block"; }
+
+    document.getElementById("aff-banner").style.display = "block";
+  }
+
+  function load(i) {
+    if (i >= CSV_URLS.length) { console.error("Affiliate banner: could not load sheet. Make sure it is shared as 'Anyone with the link can view'."); return; }
+    fetch(CSV_URLS[i])
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      })
+      .then(function (t) {
+        if (/^\s*<(!doctype|html)/i.test(t)) throw new Error("Got HTML instead of CSV");
+        render(t);
+      })
+      .catch(function (e) { console.warn("Affiliate CSV attempt failed:", CSV_URLS[i], e); load(i + 1); });
+  }
+  load(0);
+})();
+</script>
 </body>
 </html>
