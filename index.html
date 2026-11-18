@@ -138,8 +138,8 @@ details .bg-brand-600{background:#16a34a}details .bg-slate-300{background:#cbd5e
             <div id="autocompleteResults" role="listbox" aria-label="Matching places" class="hidden absolute z-30 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100"></div>
           </div>
           <div class="mt-2">
-            <button type="button" id="locateBtn" aria-describedby="locateHint" title="Finds the three U.S. counties nearest you using your device's location (your browser will ask permission). If that isn't available, it falls back to an approximate lookup from your internet address." class="px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Use my location</button>
-            <span id="locateHint" class="sr-only">Finds the three U.S. counties nearest you using your device location, after your browser asks permission. If unavailable, it uses an approximate lookup from your internet address.</span>
+            <button type="button" id="locateBtn" aria-describedby="locateHint" title="Searches everything within 40 miles of you, using your device's location (your browser will ask permission). If that isn't available, it falls back to an approximate lookup from your internet address." class="px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-lg transition flex items-center gap-1.5"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Use my location</button>
+            <span id="locateHint" class="sr-only">Searches everything within 40 miles of you, using your device location after your browser asks permission. If unavailable, it uses an approximate lookup from your internet address.</span>
           </div>
           <div id="selectedLocationsContainer" class="flex flex-wrap gap-2 mt-3 min-h-[32px]"></div>
         </div>
@@ -278,7 +278,7 @@ details .bg-brand-600{background:#16a34a}details .bg-slate-300{background:#cbd5e
 <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-600 no-print">
   <p>Plants, insects, and other groups use research-grade, non-captive observations from the <a href="https://api.inaturalist.org/v1/docs/" target="_blank" rel="noopener" class="underline hover:text-brand-600">iNaturalist V1 Open API</a>. Bird records come from the EOD – eBird Observation Dataset (Cornell Lab of Ornithology), accessed through GBIF.org under CC BY 4.0. Photos are credited to their iNaturalist contributors; commercially licensed photos are used where available.</p>
   <p class="mt-2">This is an independent project, not affiliated with or endorsed by <a href="https://www.inaturalist.org" target="_blank" rel="noopener" class="underline hover:text-brand-600">iNaturalist</a> or <a href="https://ebird.org" target="_blank" rel="noopener" class="underline hover:text-brand-600">eBird</a>.</p>
-  <p class="mt-2">The "Use my location" button uses your device's location, only after you allow it, and finds nearby counties using borders from the U.S. Census Bureau. If device location isn't available, it falls back to an approximate lookup from your IP address using geojs.io. Nothing is stored.</p>
+  <p class="mt-2">The "Use my location" button searches within 40 miles of your device's location, only after you allow it. Your position is rounded to about 7 miles before it is used. If device location isn't available, it falls back to an approximate lookup from your IP address using geojs.io. Nothing is stored.</p>
 </footer>
 
 <script>
@@ -286,8 +286,9 @@ details .bg-brand-600{background:#16a34a}details .bg-slate-300{background:#cbd5e
    To turn eBird off: set CONFIG.BIRD_SOURCE to 'inaturalist'. To restore the old file entirely: what-to-watch-for-inat-birds.html.
    Touched: (1) CONFIG keys, (2) the eBird helper block before upgradePhotos(), (3) runAnalysis(): bird candidates, selection,
    subtitle note, (4) loadChart guard, (5) speciesCard wording/link, (6) upgradePhotos filter, (7) retry handler, (8) header badge, footer. */
-/* [LOCATE] "Use my location" button added. To undo: delete the [LOCATE] block, the #locateBtn button, and its listener,
-   or restore what-to-watch-for-before-locate.html. */
+/* [LOCATE] "Use my location" = one area within CONFIG.NEAR_MILES of the device (browser location, IP fallback).
+   To undo: delete the [LOCATE] block, the #locateBtn button, its listener, and the l.near handling (addLocationTag,
+   snapshotSettings, applyShared, ebirdScore, geoQuery use), or restore the earlier county-based file. */
 const CONFIG = {
   API: 'https://api.inaturalist.org/v1',
   GBIF: 'https://api.gbif.org/v1',                        // [EBIRD-SWITCH]
@@ -297,6 +298,7 @@ const CONFIG = {
   EBIRD_YEARS: 10,                                        // [EBIRD-SWITCH] 0 = all years
   SITE_URL: 'https://sites.google.com/view/whattowatchfor/home',
   MAX_LOCATIONS: 3,
+  NEAR_MILES: 40,     // radius for "Use my location"
   GROUP_POOL: 42,     // candidate species pulled per category (plants, birds, fish...)
   OTHER_POOL: 200,    // general pool used to catch 'Other Organisms'
   CHUNK: 50,          // species per bulk whole-year lookup
@@ -420,7 +422,7 @@ function setTimeMode(mode) {
 
 function snapshotSettings() {
   const g = getSelectedGroups();
-  return { l: state.selectedLocations.map(l => [l.id, l.name]), m: state.timeMode, mo: +$('monthSelect').value,
+  return { l: state.selectedLocations.filter(l => !l.near).map(l => [l.id, l.name]), r: (state.selectedLocations.find(l => l.near) || {}).ll, m: state.timeMode, mo: +$('monthSelect').value,
            s: $('startDate').value, e: $('endDate').value, n: +$('minCountInput').value || 1, t: $('thresholdInput').value,
            g: g.length === TAXON_GROUPS.length ? undefined : g };
 }
@@ -433,10 +435,11 @@ function readShareCode(c) {
   return JSON.parse(decodeURIComponent(escape(atob(c))));
 }
 function applyShared(o) {
+  const rr = Array.isArray(o.r) && o.r.length === 2 && o.r.every(n => typeof n === 'number' && isFinite(n)) && Math.abs(o.r[0]) <= 90 && Math.abs(o.r[1]) <= 180 ? o.r : null;
   const locs = (Array.isArray(o.l) ? o.l : []).filter(x => Array.isArray(x) && Number.isInteger(x[0]) && x[0] > 0)
     .slice(0, CONFIG.MAX_LOCATIONS).map(x => ({ id: x[0], name: String(x[1] || 'Place ' + x[0]).slice(0, 80), display_name: String(x[1] || '') }));
-  if (!locs.length) { notify('That share code is not valid.'); return; }
-  state.selectedLocations = locs;
+  if (!locs.length && !rr) { notify('That share code is not valid.'); return; }
+  state.selectedLocations = rr ? [nearLocation(rr[0], rr[1])] : locs;
   renderLocationChips();
   const iso = /^\d{4}-\d{2}-\d{2}$/;
   if (o.m === 'range' && iso.test(o.s) && iso.test(o.e)) { $('startDate').value = o.s; $('endDate').value = o.e; setTimeMode('range'); }
@@ -466,6 +469,8 @@ function copyShare() {
 
 /* ---------- Locations ---------- */
 function addLocationTag(loc) {
+  if (loc.near) { state.selectedLocations = [loc]; renderLocationChips(); return; }
+  if (state.selectedLocations.some(l => l.near)) { state.selectedLocations = []; notify('Replaced the "near you" area with the place you picked. A "near you" search cannot be combined with other places.', 'ok'); }
   if (state.selectedLocations.some(l => l.id === loc.id)) return;
   if (state.selectedLocations.length >= CONFIG.MAX_LOCATIONS) { notify(`You can select up to ${CONFIG.MAX_LOCATIONS} locations at a time.`); return; }
   state.selectedLocations.push(loc);
@@ -568,7 +573,7 @@ async function pool(items, fn, conc = CONFIG.CONCURRENCY, gap = 0) {
   }));
 }
 async function fetchHisto(placeIds, id) {
-  const h = await fetchJson(`${CONFIG.API}/observations/histogram?place_id=${placeIds}&taxon_id=${id}&date_field=observed&interval=month_of_year&${CONFIG.FILTERS}`);
+  const h = await fetchJson(`${CONFIG.API}/observations/histogram?${placeIds}&taxon_id=${id}&date_field=observed&interval=month_of_year&${CONFIG.FILTERS}`);
   const map = (h.results && h.results.month_of_year) || {};
   return Array.from({ length: 12 }, (_, i) => map[i + 1] || 0);
 }
@@ -602,14 +607,15 @@ const gbifFacet = (d, re) => { const f = (d.facets || []).find(x => re.test(Stri
 // Scores birds from eBird records: window count / whole-year count, summed across the selected places.
 async function ebirdScore(minCount, activeMonths) {
   const geos = await Promise.all(state.selectedLocations.map(async l => {
+    if (l.near) return `geoDistance=${l.ll[0]},${l.ll[1]},${nearKm()}km`;
     const p = ((await fetchJson(`${CONFIG.API}/places/${l.id}`)).results || [])[0] || {};
     const wkt = bboxToWkt(p.bounding_box_geojson);
     if (!wkt) throw new Error('No bounding box for ' + l.name);
-    return wkt;
+    return 'geometry=' + encodeURIComponent(wkt);
   }));
   const y = new Date().getFullYear();
   const yearPart = CONFIG.EBIRD_YEARS ? `&year=${y - CONFIG.EBIRD_YEARS + 1},${y}` : '';
-  state.ebirdBases = geos.map(w => `${CONFIG.GBIF}/occurrence/search?datasetKey=${CONFIG.EBIRD_DS}&geometry=${encodeURIComponent(w)}&occurrenceStatus=PRESENT${yearPart}`);
+  state.ebirdBases = geos.map(w => `${CONFIG.GBIF}/occurrence/search?datasetKey=${CONFIG.EBIRD_DS}&${w}&occurrenceStatus=PRESENT${yearPart}`);
   const win = new Map(), ann = new Map();
   await pool(state.ebirdBases, async b => {
     const d = await fetchJson(`${b}&taxonKey=212&${activeMonths.map(m => 'month=' + m).join('&')}&facet=speciesKey&facetLimit=${CONFIG.EBIRD_POOL}&limit=0`);
@@ -700,7 +706,7 @@ async function runAnalysis() {
   setProgress(5, spin('Finding species active in your time window...'));
 
   try {
-    const placeIds = state.selectedLocations.map(l => l.id).join(',');
+    const placeIds = geoQuery();   // place_id=... or lat/lng/radius
     // [EBIRD-SWITCH] birds from eBird (falls back to iNaturalist automatically if anything goes wrong)
     let ebScored = [], ebirdOK = false, birdNote = '';
     if (sel.includes('Aves') && CONFIG.BIRD_SOURCE === 'ebird') {
@@ -711,7 +717,7 @@ async function runAnalysis() {
       birdNote = ebirdOK ? ' • Birds: eBird records' : ' • Birds: iNaturalist (eBird data was not available for this search)';
     }
     // One candidate pool per category so small groups (fish, amphibians, fungi...) aren't crowded out by plants and insects
-    const base = `${CONFIG.API}/observations/species_counts?place_id=${placeIds}&month=${activeMonths.join(',')}&${CONFIG.FILTERS}`;
+    const base = `${CONFIG.API}/observations/species_counts?${placeIds}&month=${activeMonths.join(',')}&${CONFIG.FILTERS}`;
     const jobs = TAXON_GROUPS.filter(g => sel.includes(g.id) && !(g.id === 'Aves' && ebirdOK)).map(g => g.taxaIds.length ? `${base}&taxon_id=${g.taxaIds.join(',')}&per_page=${CONFIG.GROUP_POOL}` : `${base}&per_page=${CONFIG.OTHER_POOL}`);
     const seen = new Map();
     let poolFailures = 0;
@@ -735,7 +741,7 @@ async function runAnalysis() {
     let step = 0;
     await pool(chunks, async ch => {
       try {
-        const d = await fetchJson(`${CONFIG.API}/observations/species_counts?place_id=${placeIds}&taxon_id=${ch.map(c => c.taxon.id).join(',')}&per_page=${ch.length}&${CONFIG.FILTERS}`);
+        const d = await fetchJson(`${CONFIG.API}/observations/species_counts?${placeIds}&taxon_id=${ch.map(c => c.taxon.id).join(',')}&per_page=${ch.length}&${CONFIG.FILTERS}`);
         (d.results || []).forEach(r => { annual[r.taxon.id] = r.count; });
       } catch (e) { console.warn('Bulk lookup failed; using fallback', e); }
       setProgress(15 + 25 * (++step / chunks.length));
@@ -922,67 +928,25 @@ function generateBingoCards() {
   box.scrollIntoView({ behavior: 'smooth' });
 }
 
-/* ===== [LOCATE] "Use my location": three nearest U.S. counties (IP address + Census boundaries) -> iNaturalist places ===== */
-const CENSUS_COUNTY_URL = 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/82/query';
-const STATE_ABBR = {'01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY','60':'AS','66':'GU','69':'MP','72':'PR','78':'VI'};
-let turfPromise = null;
-function loadTurf() {   // the mapping library is only downloaded when the button is used
-  if (window.turf) return Promise.resolve();
-  if (!turfPromise) turfPromise = new Promise((res, rej) => {
-    const sc = document.createElement('script');
-    sc.src = 'https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js';
-    sc.onload = res;
-    sc.onerror = () => { turfPromise = null; rej(new Error('Map library did not load')); };
-    document.head.appendChild(sc);
-  });
-  return turfPromise;
+/* ===== [LOCATE] "Use my location": everything within NEAR_MILES of the device ===== */
+const LOCATE_IP_FALLBACK = true;   // false = never use the IP lookup
+const nearKm = () => Math.round(CONFIG.NEAR_MILES * 1.609);
+const round1 = n => Math.round(n * 10) / 10;   // 0.1 degree (about 7 miles): approximate on purpose, keeps share codes less precise
+function nearLocation(lat, lng) {
+  const ll = [round1(lat), round1(lng)];
+  return { id: 'near', near: true, ll, name: `Within ${CONFIG.NEAR_MILES} miles of you`, display_name: `Within ${CONFIG.NEAR_MILES} miles of ${ll[0]}, ${ll[1]}` };
 }
-function distanceToCounty(point, poly) {
-  try { if (turf.booleanPointInPolygon(point, poly)) return 0; return turf.pointToLineDistance(point, turf.polygonToLine(poly), { units: 'miles' }); }
-  catch (_) { return turf.distance(point, turf.centroid(poly), { units: 'miles' }); }
+function geoQuery() {
+  const n = state.selectedLocations.find(l => l.near);
+  return n ? `lat=${n.ll[0]}&lng=${n.ll[1]}&radius=${nearKm()}` : 'place_id=' + state.selectedLocations.map(l => l.id).join(',');
 }
-async function countiesNear(lon, lat) {
-  let list = [];
-  for (const pad of [0.35, 0.8, 1.6, 3.2]) {
-    const url = new URL(CENSUS_COUNTY_URL);
-    const p = { where: '1=1', geometry: JSON.stringify({ xmin: lon - pad, ymin: lat - pad, xmax: lon + pad, ymax: lat + pad, spatialReference: { wkid: 4326 } }),
-      geometryType: 'esriGeometryEnvelope', inSR: '4326', spatialRel: 'esriSpatialRelIntersects', outFields: 'GEOID,STATE,NAME,BASENAME',
-      returnGeometry: 'true', outSR: '4326', maxAllowableOffset: '0.002', f: 'geojson' };   // simplified outlines keep the download small
-    Object.entries(p).forEach(([k, v]) => url.searchParams.set(k, v));
-    list = (await fetchJson(url.toString())).features || [];
-    if (list.length >= CONFIG.MAX_LOCATIONS) break;
-  }
-  return list;
-}
-const normPlace = s => String(s || '').toLowerCase().replace(/\b(county|parish|borough|census area|municipality)\b/g, '').replace(/[^a-z]/g, '');
-// Matches one Census county to its iNaturalist place (name + state + closeness of centers). Returns null if not confident.
-async function matchInatCounty(f) {
-  const abbr = STATE_ABBR[f.properties.STATE] || '';
-  const base = normPlace(f.properties.NAME || f.properties.BASENAME);
-  const cen = turf.centroid(f).geometry.coordinates;   // [lon, lat]
-  const q = String(f.properties.BASENAME || f.properties.NAME || '').trim();
-  let d;
-  try { d = await fetchJson(`${CONFIG.API}/places/autocomplete?q=${encodeURIComponent(q)}&per_page=30`); } catch (e) { return null; }
-  const cands = (d.results || []).map(p => {
-    const c = String(p.location || '').split(',').map(Number);
-    const km = c.length === 2 && isFinite(c[0]) ? turf.distance(turf.point(cen), turf.point([c[1], c[0]]), { units: 'kilometers' }) : null;
-    const stateOk = new RegExp('(^|,\\s*)' + abbr + '(,|$)').test(p.display_name || '');
-    const nameOk = normPlace(p.name) === base || normPlace(String(p.display_name || '').split(',')[0]) === base;
-    const typeOk = /county|parish|borough|census|municipality/i.test(p.place_type_name || '');
-    return { p, km, score: (stateOk ? 4 : 0) + (nameOk ? 2 : 0) + (typeOk ? 1 : 0) };
-  }).sort((a, b) => b.score - a.score || (a.km ?? 1e9) - (b.km ?? 1e9));
-  const best = cands[0];
-  if (!best || best.score < 6 || (best.km !== null && best.km > 100)) return null;
-  return { id: best.p.id, name: `${best.p.name}, ${abbr}`, display_name: best.p.display_name || best.p.name };
-}
-  const LOCATE_IP_FALLBACK = true;   // false = never use the IP lookup
 function getBrowserPosition() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) return reject({ code: 'unsupported' });
     navigator.geolocation.getCurrentPosition(
-      p => resolve({ lat: p.coords.latitude, lon: p.coords.longitude }),
+      p => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
       err => reject(err),
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 }  // county-level, so low accuracy is fine
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 }   // a 40-mile circle does not need GPS accuracy
     );
   });
 }
@@ -992,10 +956,9 @@ async function useMyLocation() {
   const label = btn.innerHTML;
   btn.disabled = true; btn.textContent = 'Locating...';
   try {
-    await loadTurf();
-    let lat, lon, source = 'device';
+    let lat, lng, source = 'device';
     try {
-      ({ lat, lon } = await getBrowserPosition());
+      ({ lat, lng } = await getBrowserPosition());
     } catch (geoErr) {
       console.warn('Browser location unavailable', geoErr);
       if (!LOCATE_IP_FALLBACK) {
@@ -1005,23 +968,13 @@ async function useMyLocation() {
         return;
       }
       const g = await fetchJson('https://get.geojs.io/v1/ip/geo.json');
-      lat = parseFloat(g.latitude); lon = parseFloat(g.longitude);
-      if (g.country_code && g.country_code !== 'US') { notify('"Use my location" only works for U.S. counties right now. Please search for your area instead.'); return; }
-      source = 'ip';
+      lat = parseFloat(g.latitude); lng = parseFloat(g.longitude); source = 'ip';
     }
-    if (!isFinite(lat) || !isFinite(lon)) throw new Error('Could not determine your location.');
-    const point = turf.point([lon, lat]);
-    const counties = await countiesNear(lon, lat);
-    if (!counties.length) { notify('No U.S. county data was found for your location. Please search for your area instead.'); return; }
-    const top = counties.map(f => ({ f, d: distanceToCounty(point, f) })).sort((a, b) => a.d - b.d).slice(0, CONFIG.MAX_LOCATIONS);
-    const found = [];
-    for (const x of top) { const m = await matchInatCounty(x.f); if (m && !found.some(l => l.id === m.id)) found.push(m); }
-    if (!found.length) { notify("Couldn't match your nearby counties to iNaturalist places. Please search for your area instead."); return; }
-    state.selectedLocations = found;
-    renderLocationChips();
+    if (!isFinite(lat) || !isFinite(lng)) throw new Error('Could not determine your location.');
+    addLocationTag(nearLocation(lat, lng));
     notify(source === 'device'
-      ? `Added ${found.map(l => l.name).join('; ')}, based on your device's location. You can remove or change them before searching.`
-      : `Added ${found.map(l => l.name).join('; ')}, based on your internet address because device location wasn't available. This is approximate (a VPN can throw it off). You can remove or change them before searching.`, 'ok');
+      ? `Added everything within ${CONFIG.NEAR_MILES} miles of your device's location. You can remove it or pick other places before searching.`
+      : `Added everything within ${CONFIG.NEAR_MILES} miles of your approximate location, based on your internet address because device location wasn't available (a VPN can throw it off). You can remove it or pick other places before searching.`, 'ok');
   } catch (e) {
     console.warn('Use my location failed', e);
     notify('Could not find your location right now. Please search for your area instead.');
@@ -1029,6 +982,7 @@ async function useMyLocation() {
     btn.disabled = false; btn.innerHTML = label;
   }
 }
+/* ===== end [LOCATE] block ===== */
 
 /* ---------- Init ---------- */
 window.addEventListener('DOMContentLoaded', () => {
