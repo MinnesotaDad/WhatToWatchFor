@@ -1085,7 +1085,7 @@ window.addEventListener('DOMContentLoaded', () => {
   var SHEET_ID = "1tEyoKjIdn7AIgCjPN3nbBeFe_SzrxaHfR0hVgITfoBc";
   // Try CORS-friendly CSV endpoints in order (the /edit URL returns an HTML page, not CSV)
   var CSV_URLS = [
-    "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:csv&gid=0",
+    "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:csv&headers=1&gid=0",
     "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/export?format=csv&gid=0"
   ];
 
@@ -1115,11 +1115,24 @@ window.addEventListener('DOMContentLoaded', () => {
   function render(csvText) {
     var rows = parseCSV(csvText);
     if (rows.length < 2) return;
-    var headers = rows[0].map(function (h) { return h.toLowerCase(); });
+    // Normalize headers so "Affiliate URL", "affiliate_url", "AffiliateURL" all match
+    var headers = rows[0].map(function (h) { return h.toLowerCase().replace(/[^a-z]/g, ""); });
     var urlIdx = headers.indexOf("affiliateurl");
-    if (urlIdx < 0) return;
-    var items = rows.slice(1).filter(function (r) { return /^https?:\/\//i.test(r[urlIdx] || ""); });
-    if (!items.length) return;
+    if (urlIdx < 0) urlIdx = headers.indexOf("url");
+    if (urlIdx < 0) urlIdx = headers.indexOf("link");
+    var data = rows.slice(1);
+    if (urlIdx < 0) {   // header row missing/unreadable: find the column that holds http links
+      var all = rows;
+      for (var c = 0; c < (rows[0] || []).length && urlIdx < 0; c++) {
+        if (all.some(function (r) { return /^https?:\/\/(www\.)?(amazon\.|amzn\.)/i.test(r[c] || ""); })) urlIdx = c;
+      }
+      if (urlIdx < 0) { console.warn("Affiliate banner: no URL column found. Headers seen:", rows[0]); return; }
+      headers = ["title", "description", "affiliateurl", "imageurl", "buttontext"];  // assume documented column order
+      urlIdx = headers.indexOf("affiliateurl");
+      data = rows;
+    }
+    var items = data.filter(function (r) { return /^https?:\/\//i.test(r[urlIdx] || ""); });
+    if (!items.length) { console.warn("Affiliate banner: no rows with an http(s) link."); return; }
 
     var pick = items[Math.floor(Math.random() * items.length)];
     function col(name) { var i = headers.indexOf(name); return i < 0 ? "" : (pick[i] || ""); }
