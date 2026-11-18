@@ -9,7 +9,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What to Watch For</title>
+<title>iNaturalist: What to Watch For</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,8 +39,8 @@ details[open] > summary .chev { transform:rotate(180deg); }
   body.print-bingo { display:block !important; min-height:0 !important; }
   body.print-bingo main { max-width:none !important; width:100% !important; margin:0 !important; padding:0 !important; }
   body.print-bingo #bingoContainer { margin:0 !important; }
-  body.print-bingo .bingo-sheet { display:grid; grid-template-columns:1fr 1fr; gap:0.2in; width:100%; height:7.9in; overflow:hidden; break-inside:avoid; page-break-inside:avoid; }
-  body.print-bingo .bingo-sheet:last-child { break-after:auto; page-break-after:auto; }
+  body.print-bingo .bingo-sheet { display:grid; grid-template-columns:1fr 1fr; gap:0.2in; width:100%; height:7.5in; overflow:hidden; break-inside:avoid; page-break-inside:avoid; break-after:auto !important; page-break-after:auto !important; }
+  body.print-bingo .bingo-sheet ~ .bingo-sheet { break-before:page; page-break-before:always; }
   body.print-bingo .bingo-card { margin:0 !important; padding:0.12in 0.15in !important; border:1px dashed #94a3b8 !important; border-radius:0 !important; box-shadow:none !important; height:100%; box-sizing:border-box; display:flex; flex-direction:column; break-after:auto !important; page-break-after:auto !important; overflow:hidden; }
   body.print-bingo .bingo-card h2 { font-size:15px !important; }
   body.print-bingo .bingo-card .bingo-grid { width:100% !important; max-width:none !important; margin:0 !important; gap:3px !important; }
