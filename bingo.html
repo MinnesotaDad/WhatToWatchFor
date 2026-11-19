@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nature Explorer Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g9:#14532d;--g8:#166534;--g6:#16a34a;--g1:#dcfce7;--ink:#1e293b;--mut:#475569;--line:#cbd5e1;--bg:#f8fafc;--card:#fff}
+@media(prefers-color-scheme:dark){:root{--ink:#e2e8f0;--mut:#94a3b8;--line:#334155;--bg:#0f172a;--card:#1e293b}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{background:linear-gradient(90deg,var(--g9),var(--g8));color:#fff;padding:10px 12px;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:17px;font-weight:800;letter-spacing:.02em}
+header p{margin:2px 0 6px;font-size:11px;color:#bbf7d0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#86efac;transition:width .3s}
+#count{font-size:12px;font-weight:700;margin-top:4px}
+main{max-width:560px;margin:0 auto;padding:8px}
+#note{display:none;align-items:center;justify-content:space-between;gap:8px;background:var(--g1);color:var(--g9);border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:8px}
+#note button{background:none;border:0;font-size:18px;color:inherit;cursor:pointer}
+@media(min-width:768px){#note{display:flex}}
+#win{display:none;background:#fef3c7;color:#78350f;border:2px solid #f59e0b;border-radius:10px;padding:10px;text-align:center;font-weight:800;margin-bottom:8px}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;touch-action:manipulation}
+.cell{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:10px;overflow:hidden;padding:0;background:var(--card);cursor:pointer;color:#fff;font:inherit}
+.cell img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cell .nm{position:absolute;left:0;right:0;bottom:0;padding:10px 3px 3px;font-size:10px;font-weight:700;line-height:1.1;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.8));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cell.done::after{content:"";position:absolute;inset:0;background:rgba(22,163,74,.28)}
+.chk{position:absolute;top:50%;left:50%;width:46%;aspect-ratio:1;transform:translate(-50%,-60%);background:#16a34a;border:3px solid #fff;border-radius:50%;z-index:2;display:none;place-items:center;box-shadow:0 1px 6px rgba(0,0,0,.4)}
+.chk svg{width:60%;height:60%}
+.cell.done .chk{display:grid}
+.cam{position:absolute;left:3px;top:3px;z-index:2;background:rgba(0,0,0,.65);border-radius:6px;font-size:10px;padding:1px 4px}
+.cell.line{outline:3px solid #f59e0b;outline-offset:-3px}
+.free{background:linear-gradient(135deg,var(--g9),var(--g8));display:grid;place-items:center;font-weight:800;font-size:12px;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.btn{flex:1 1 150px;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 14px inherit;font-family:inherit;padding:10px 14px;cursor:pointer}
+.btn.pri{background:var(--g6);border-color:var(--g6);color:#fff}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.fine{font-size:11px;color:var(--mut);text-align:center;margin:8px 0}
+#sheetBg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}
+#sheet{background:var(--card);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+#sheet h2{margin:0 0 8px;font-size:18px}
+#sheet img{display:block;width:min(70vw,260px);aspect-ratio:1;object-fit:cover;border-radius:12px;margin:0 auto 12px;border:1px solid var(--line)}
+#sheet .btn{display:block;width:100%;margin-bottom:8px}
+#msg{text-align:center;padding:40px 16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>NATURE EXPLORER BINGO</h1>
+  <p id="where"></p>
+  <div class="bar"><i id="barFill"></i></div>
+  <div id="count">0 of 24 found</div>
+</header>
+<main>
+  <div id="note"><span>Best on a phone or tablet, so you can take photos right in the field.</span><button aria-label="Dismiss" onclick="this.parentNode.remove()">&times;</button></div>
+  <div id="win">BINGO! You completed a line!</div>
+  <div id="grid" role="grid"></div>
+  <div class="actions">
+    <button class="btn" id="saveBtn">Save original photos</button>
+    <button class="btn" id="inatBtn" disabled title="Coming soon">Submit to iNaturalist (coming soon)</button>
+  </div>
+  <p class="fine">Tap a square when you find it. Photos stay on this device and are never uploaded unless you submit them. Tip: use "Add to Home Screen" to open this like an app.</p>
+  <p class="fine">Look, don't touch or taste. Some plants and mushrooms are poisonous.</p>
+  <p class="fine"><button class="btn" id="clearBtn" style="flex:none;min-height:36px;font-size:12px">Clear this card</button></p>
+</main>
+<div id="sheetBg"><div id="sheet"></div></div>
+<input type="file" id="fCam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fPick" accept="image/*" hidden>
+<script>
+const INAT_CLIENT_ID = '';  // paste your registered iNaturalist client ID here later
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+let data, cardId, db = null, rec = { sq: {}, refs: {} }, cur = null;
+
+/* ---------- storage (IndexedDB; falls back to memory) ---------- */
+const openDb = () => new Promise((res, rej) => { const r = indexedDB.open('wtwf-bingo', 1); r.onupgradeneeded = () => r.result.createObjectStore('cards'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+const dbGet = k => new Promise(res => { if (!db) return res(); try { const q = db.transaction('cards').objectStore('cards').get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(); } catch (e) { res(); } });
+const save = () => new Promise(res => { if (!db) return res(false); try { const t = db.transaction('cards', 'readwrite'); t.objectStore('cards').put(rec, cardId); t.oncomplete = () => res(true); t.onerror = () => res(false); } catch (e) { res(false); } });
+
+/* ---------- card ---------- */
+function decode() {
+  try { const h = location.hash.replace(/^#c=/, '').replace(/-/g, '+').replace(/_/g, '/'); const d = JSON.parse(decodeURIComponent(escape(atob(h)))); return d && d.s && d.s.length >= 24 ? d : null; } catch (e) { return null; }
+}
+const hash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return 'c' + (h >>> 0).toString(36); };
+const speciesAt = c => data.s[c < 12 ? c : c - 1];            // cell 12 is FREE
+const refImg = (c, sp) => rec.refs[sp[0]] || sp[2];
+const done = c => c === 12 || !!rec.sq[c];
+const LINES = (() => { const L = []; for (let i = 0; i < 5; i++) { L.push([0,1,2,3,4].map(j => i*5+j), [0,1,2,3,4].map(j => j*5+i)); } L.push([0,6,12,18,24], [4,8,12,16,20]); return L; })();
+
+function render() {
+  let h = '', found = 0;
+  const win = LINES.filter(l => l.every(done)), inLine = new Set(win.flat());
+  for (let c = 0; c < 25; c++) {
+    if (c === 12) { h += `<div class="cell free ${inLine.has(c) ? 'line' : ''}">FREE</div>`; continue; }
+    const sp = speciesAt(c), s = rec.sq[c];
+    if (s) found++;
+    const img = s && s.thumb ? s.thumb : refImg(c, sp);
+    h += `<button class="cell ${s ? 'done' : ''} ${inLine.has(c) ? 'line' : ''}" data-c="${c}" aria-label="${esc(sp[1])}${s ? ', found' : ''}"><img src="${esc(img)}" alt="" loading="lazy"><span class="chk">${CHECK}</span>${s && s.type === 'camera' ? '<span class="cam">&#128247;</span>' : ''}<span class="nm">${esc(sp[1])}</span></button>`;
+  }
+  $('grid').innerHTML = h;
+  $('count').textContent = `${found} of 24 found`;
+  $('barFill').style.width = (found / 24 * 100) + '%';
+  $('win').style.display = win.length ? 'block' : 'none';
+  $('win').textContent = win.length > 1 ? `BINGO! ${win.length} lines completed!` : 'BINGO! You completed a line!';
+}
+
+/* ---------- tap sheet ---------- */
+function openSheet(c) {
+  cur = c;
+  const sp = speciesAt(c), s = rec.sq[c];
+  const img = s && s.thumb ? s.thumb : refImg(c, sp);
+  $('sheet').innerHTML = `<h2>${esc(sp[1])}</h2><img src="${esc(img)}" alt="">
+    <p class="fine" style="margin-top:0">${s ? (s.type === 'camera' ? 'Marked found with your own camera.' : 'Photo saved. You can replace it.') : 'Found it? Add a photo or mark it found.'}</p>
+    <button class="btn pri" id="bTake">&#128247; ${s ? 'Retake photo' : 'Take a photo'}</button>
+    <button class="btn" id="bPick">Choose a photo</button>
+    <button class="btn" id="bCam">I used a camera</button>
+    ${s ? '<button class="btn" id="bClear">Clear this square</button>' : ''}
+    <button class="btn" id="bClose">Close</button>`;
+  $('sheetBg').style.display = 'flex';
+  $('bTake').onclick = () => $('fCam').click();
+  $('bPick').onclick = () => $('fPick').click();
+  $('bCam').onclick = async () => { rec.sq[c] = { type: 'camera', t: Date.now() }; await save(); closeSheet(); render(); };
+  if (s) $('bClear').onclick = async () => { delete rec.sq[c]; await save(); closeSheet(); render(); };
+  $('bClose').onclick = closeSheet;
+}
+const closeSheet = () => { $('sheetBg').style.display = 'none'; cur = null; };
+$('sheetBg').addEventListener('click', e => { if (e.target === $('sheetBg')) closeSheet(); });
+$('grid').addEventListener('click', e => { const b = e.target.closest('.cell[data-c]'); if (b) openSheet(+b.dataset.c); });
+
+/* ---------- photos ---------- */
+function thumbOf(file) {
+  return new Promise((res, rej) => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      const S = 480, cv = document.createElement('canvas'); cv.width = cv.height = S;
+      const m = Math.min(im.naturalWidth, im.naturalHeight), sx = (im.naturalWidth - m) / 2, sy = (im.naturalHeight - m) / 2;
+      cv.getContext('2d').drawImage(im, sx, sy, m, m, 0, 0, S, S);
+      URL.revokeObjectURL(u); res(cv.toDataURL('image/jpeg', .8));
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('bad image')); };
+    im.src = u;
+  });
+}
+const getLoc = () => new Promise(r => { if (!navigator.geolocation) return r({}); navigator.geolocation.getCurrentPosition(p => r({ lat: p.coords.latitude, lng: p.coords.longitude, acc: p.coords.accuracy }), () => r({}), { timeout: 8000, maximumAge: 60000 }); });
+
+async function handleFile(f) {
+  const c = cur; if (!f || c == null) return;
+  try {
+    const thumb = await thumbOf(f);
+    rec.sq[c] = { type: 'photo', thumb, orig: f, t: f.lastModified || Date.now() };  // original file kept untouched
+    await save(); closeSheet(); render();
+    const loc = await getLoc();                                                       // location recorded after, never blocks the UI
+    if (loc.lat != null && rec.sq[c]) { Object.assign(rec.sq[c], loc); save(); }
+  } catch (e) { alert('Sorry, that photo could not be read. Please try another.'); }
+}
+['fCam', 'fPick'].forEach(id => $(id).addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; handleFile(f); }));
+
+/* ---------- buttons ---------- */
+$('saveBtn').onclick = async () => {
+  const items = Object.entries(rec.sq).filter(([, s]) => s.orig);
+  if (!items.length) { alert('No photos to save yet.'); return; }
+  for (const [c, s] of items) {
+    const a = document.createElement('a'), ext = (s.orig.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+    a.href = URL.createObjectURL(s.orig); a.download = speciesAt(+c)[1].replace(/[^a-z0-9]+/gi, '-') + '.' + ext;
+    document.body.appendChild(a); a.click(); a.remove();
+    await new Promise(r => setTimeout(r, 600));
+  }
+};
+$('clearBtn').onclick = async () => { if (confirm('Clear all photos and progress on this card?')) { rec.sq = {}; await save(); render(); } };
+
+/* ---------- start ---------- */
+(async function init() {
+  data = decode();
+  if (!data) { document.querySelector('main').innerHTML = '<div id="msg"><h2>No bingo card found</h2><p>Go back to <a href="https://minnesotadad.github.io/WhatToWatchFor/">What to Watch For</a>, run a search, and tap "Play Bingo on Your Phone."</p></div>'; return; }
+  cardId = hash(location.hash);
+  $('where').textContent = data.n || '';
+  try { db = await openDb(); } catch (e) { db = null; }
+  const saved = await dbGet(cardId); if (saved) rec = Object.assign({ sq: {}, refs: {} }, saved);
+  if (!db) $('where').textContent += ' (progress will not be saved in this browser mode)';
+  render();
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+  // Best effort: keep reference photos on the device so the card still shows with no signal
+  let changed = false;
+  for (const sp of data.s) {
+    if (rec.refs[sp[0]]) continue;
+    try {
+      const b = await (await fetch(sp[2])).blob();
+      rec.refs[sp[0]] = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); });
+      changed = true;
+    } catch (e) { break; }  // blocked by CORS or offline: keep using the web URLs
+  }
+  if (changed) { await save(); render(); }
+})();
+</script>
+</body>
+</html>
