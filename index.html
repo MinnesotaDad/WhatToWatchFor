@@ -220,6 +220,11 @@ details .bg-brand-600{background:#16a34a}details .bg-slate-300{background:#cbd5e
                 <span><button type="button" id="groupsAllBtn" class="underline">All</button> · <button type="button" id="groupsNoneBtn" class="underline">None</button></span>
               </div>
               <div id="groupChecks" class="grid grid-cols-2 gap-x-3 gap-y-1.5"></div>
+              <div class="mt-3 flex items-center justify-between gap-2">
+                <label for="perGroupInput" title="How many of the top species to show for each selected group.">Species shown per group (top):</label>
+                <input type="number" id="perGroupInput" value="10" min="1" max="30" class="w-16 py-1 px-2 text-center text-xs font-semibold bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+              </div>
+              <p class="mt-1 text-slate-600">Default is 10, up to 30. Choosing just one group and a higher number gives you more species to work with, for example for a fish-only or bird-only bingo card. Species above the Spike Score threshold are still added, and a search never shows more than 75 species in total.</p>
             </div>
           </details>
         </div>
@@ -331,7 +336,8 @@ const CONFIG = {
   GROUP_POOL: 42,     // candidate species pulled per category (plants, birds, fish...)
   OTHER_POOL: 200,    // general pool used to catch 'Other Organisms'
   CHUNK: 50,          // species per bulk whole-year lookup
-  PER_GROUP: 10,      // top species shown per category
+  PER_GROUP: 10,      // default: top species shown per category
+  PER_GROUP_MAX: 30,  // highest value the user can choose
   MIN_PER_GROUP: 3,   // each category keeps at least this many if the cap bites
   MAX_TOTAL: 75,      // hard cap on species shown
   SPIKE_FACTOR: 3.6,  // threshold = this x the "even spread" share (30% for one month)
@@ -459,7 +465,7 @@ function setTimeMode(mode) {
 function snapshotSettings() {
   const g = getSelectedGroups();
   return { l: state.selectedLocations.filter(l => !l.near).map(l => [l.id, l.name]), r: (n => n ? [...n.ll, n.miles] : undefined)(state.selectedLocations.find(l => l.near)), m: state.timeMode, mo: +$('monthSelect').value,
-           s: $('startDate').value, e: $('endDate').value, n: +$('minCountInput').value || 1, t: $('thresholdInput').value,
+           s: $('startDate').value, e: $('endDate').value, n: +$('minCountInput').value || 1, t: $('thresholdInput').value, pg: getPerGroup(),
            g: g.length === TAXON_GROUPS.length ? undefined : g };
 }
 function makeShareCode() {  // shares the settings of the search on screen, not whatever the controls say now
@@ -483,6 +489,7 @@ function applyShared(o) {
   else if (/^(1[0-2]|[1-9])$/.test(String(o.mo))) { $('monthSelect').value = String(o.mo); setTimeMode('month'); }
   if (Number.isInteger(o.n) && o.n >= 1 && o.n <= 500) $('minCountInput').value = o.n;
   $('thresholdInput').value = /^\d{1,3}$/.test(String(o.t || '')) ? o.t : '';
+  $('perGroupInput').value = Number.isInteger(o.pg) && o.pg >= 1 && o.pg <= CONFIG.PER_GROUP_MAX ? o.pg : CONFIG.PER_GROUP;
   setSelectedGroups(Array.isArray(o.g) ? o.g.filter(id => TAXON_GROUPS.some(g => g.id === id)) : null);
   runAnalysis();
 }
@@ -616,13 +623,18 @@ async function fetchHisto(placeIds, id) {
   return Array.from({ length: 12 }, (_, i) => map[i + 1] || 0);
 }
 // Top PER_GROUP per category + anything over the threshold; if over MAX_TOTAL, keep each category's top MIN_PER_GROUP then fill by score.
-function selectSpecies(scored, threshold) {
+function getPerGroup() {
+  const v = parseInt($('perGroupInput').value, 10);
+  return Number.isFinite(v) ? Math.max(1, Math.min(CONFIG.PER_GROUP_MAX, v)) : CONFIG.PER_GROUP;
+}
+function selectSpecies(scored, threshold, perGroup) {
+  perGroup = perGroup || CONFIG.PER_GROUP;
   const rank = (a, b) => b.spikeScore - a.spikeScore || b.count - a.count;
   const by = {}, keep = new Set(), must = new Set();
   scored.forEach(s => (by[s.group] = by[s.group] || []).push(s));
   Object.values(by).forEach(arr => {
     arr.sort(rank);
-    arr.slice(0, CONFIG.PER_GROUP).forEach(s => keep.add(s));
+    arr.slice(0, perGroup).forEach(s => keep.add(s));
     arr.slice(0, CONFIG.MIN_PER_GROUP).forEach(s => must.add(s));
   });
   scored.forEach(s => { if (s.spikeScore >= threshold) keep.add(s); });
@@ -793,7 +805,7 @@ async function runAnalysis() {
       c.group = groupOf(c.taxon);
       return c;
     });
-    const picked = selectSpecies(scored.concat(ebScored), threshold);   // [EBIRD-SWITCH] eBird birds join the same selection rules
+    const picked = selectSpecies(scored.concat(ebScored), threshold, settings.pg || CONFIG.PER_GROUP);   // [EBIRD-SWITCH] eBird birds join the same selection rules
     const ebPicked = picked.filter(i => i.src === 'ebird');
     if (ebPicked.length) { setProgress(38, spin('Matching birds to photos and names...')); await resolveEbirdItems(ebPicked); }
     const items = picked.filter(i => !i.drop);
@@ -830,7 +842,7 @@ async function runAnalysis() {
     container.innerHTML = '';
     $('resultsHeader').classList.remove('hidden');
     $('resultsTitle').textContent = `Analysis Results (${items.length} species)`;
-    $('resultsSubtitle').textContent = `Locations: ${state.selectedLocations.map(l => l.name).join(', ')} • Top ${CONFIG.PER_GROUP} per group, plus anything with a Spike Score of ${threshold}% or more (max ${CONFIG.MAX_TOTAL} species)` +
+    $('resultsSubtitle').textContent = `Locations: ${state.selectedLocations.map(l => l.name).join(', ')} • Top ${settings.pg} per group, plus anything with a Spike Score of ${threshold}% or more (max ${CONFIG.MAX_TOTAL} species)` +
       birdNote +
       (sel.length < TAXON_GROUPS.length ? ` • Groups: ${TAXON_GROUPS.filter(g => sel.includes(g.id)).map(g => g.name).join(', ')}` : '') +
       (failed ? ` • ${failed} monthly graph(s) couldn't load; use Retry on those cards.` : '') +
